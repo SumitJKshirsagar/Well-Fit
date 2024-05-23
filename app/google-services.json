@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "175420533027",
+    "project_id": "well-fit-cf83c",
+    "storage_bucket": "well-fit-cf83c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:175420533027:android:a292bfd031f91d6185c496",
+        "android_client_info": {
+          "package_name": "com.example.well_fit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkJCDa2WGEMPimPLLKU9hLgbHk1qCPwRg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
