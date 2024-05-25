@@ -7,7 +7,7 @@
     </shape>
 </item>
 
-    <item android:state_pressed="true">
+    <item android:state_pressed="true" android:state_selected="true">
         <shape android:shape="rectangle" android:tint="@color/black">
             <corners android:radius="5dp"/>
         </shape>
