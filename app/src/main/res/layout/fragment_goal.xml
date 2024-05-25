@@ -1,13 +1,82 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="AboutUserUi.GoalFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_margin="20dp"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Step 7 of 8"
+            android:textColor="#191919"
+            android:textSize="18dp" />
 
-</FrameLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="What's Your Goal?"
+            android:textColor="#191919"
+            android:textSize="29dp"
+            android:textStyle="bold" />
+        <LinearLayout
+            android:id="@+id/ll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/Maletxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="200dp"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textSize="25dp"
+                android:background="@drawable/txtbg"
+                android:textColor="#303841"
+                android:drawableLeft="@drawable/scale"
+                android:drawableTint="#303841"
+                android:padding="20dp"
+                android:text="Weight Loss" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:textSize="25dp"
+                android:textAlignment="center"
+                android:background="@drawable/txtbg"
+                android:layout_marginTop="20dp"
+                android:textColor="#303841"
+                android:drawableLeft="@drawable/muscle"
+                android:drawableTint="#303841"
+                android:text="Gain Muscle"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="20dp"
+                android:textSize="25dp"
+                android:textAlignment="center"
+                android:background="@drawable/black_bg"
+                android:textColor="@color/white"
+                android:layout_marginTop="40dp"
+                android:text="Improve Fitness"
+                android:drawableLeft="@drawable/dumbell"
+                android:drawableTint="@color/white"
+                />
+
+
+
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

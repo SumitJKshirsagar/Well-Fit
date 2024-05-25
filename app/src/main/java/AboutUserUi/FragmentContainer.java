@@ -1,9 +1,11 @@
 package AboutUserUi;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,14 +13,19 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.well_fit.HomeFragment;
+import com.example.well_fit.MainActivity;
 import com.example.well_fit.R;
+import com.example.well_fit.Widget;
+import com.example.well_fit.home;
 
 
 public class FragmentContainer extends AppCompatActivity {
 
 
     private int currentFragmentIndex = 0;
-    private Fragment[] fragments = {new SelectFevFragment(),new GenderFragment(),new AgeFragment(),new HeightFragment(),new WeightFragment(),new GoalFragment(),new LevelFragment()};
+    private TextView skip;
+    private Fragment[] fragments = {new SelectFevFragment(),new GenderFragment(),new AgeFragment(),new HeightFragment(),new WeightFragment(),new GoalFragment(),new LevelFragment(),new FinalFragment()};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +38,7 @@ public class FragmentContainer extends AppCompatActivity {
 
         ImageView previousButton = findViewById(R.id.previous);
         Button nextButton = findViewById(R.id.nextSteps);
+        skip = findViewById(R.id.skip);
 
         previousButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,6 +51,15 @@ public class FragmentContainer extends AppCompatActivity {
                 if(currentFragmentIndex == 0){
                     previousButton.setVisibility(View.INVISIBLE);
                 }
+            }
+        });
+
+        skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FragmentContainer.this, home.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             }
         });
 
@@ -59,6 +76,17 @@ public class FragmentContainer extends AppCompatActivity {
                 } else if (currentFragmentIndex==0) {
                     previousButton.setVisibility(View.INVISIBLE);
                 }
+
+                if(currentFragmentIndex == 6){
+                    nextButton.setText("FINISH STEPS");
+                } else if (currentFragmentIndex == 7) {
+                    skip.setVisibility(View.INVISIBLE);
+                    nextButton.setText("GET STARTED!");
+                }else {
+                    nextButton.setText("NEXT STEP");
+                    skip.setVisibility(View.VISIBLE);
+                }
+
 
             }
         });

@@ -1,0 +1,98 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="AboutUserUi.FinalFragment">
+
+
+    <TextView
+        android:id="@+id/header_title"
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Let's get started"
+        android:textSize="35dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="The standard chunk of Lorem Ipsum"
+        android:textSize="20dp"
+        android:textAlignment="center"
+        android:textColor="#3A4750"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="used since the 1500s is reproduced below"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:textColor="#3A4750"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="for those interested."
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:textColor="#3A4750"
+        />
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/mask_group__1_"
+        android:src="@drawable/unnamed_removebg_preview_1"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"/>
+
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:orientation="horizontal">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Sculpt your"
+        android:textAlignment="center"
+        android:textSize="23dp"
+        android:textColor="#000000"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text=" ideal body,"
+        android:textAlignment="center"
+        android:textSize="23dp"
+        android:textColor="#B0C929"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text=" free your"
+        android:textAlignment="center"
+        android:textSize="23dp"
+        android:textColor="#000000"
+        />
+
+</LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="true self, transform your life."
+        android:textAlignment="center"
+        android:textSize="23dp"
+        android:textColor="#000000"
+        />
+
+</LinearLayout>

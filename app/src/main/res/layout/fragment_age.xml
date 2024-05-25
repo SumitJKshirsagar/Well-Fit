@@ -1,13 +1,63 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="AboutUserUi.AgeFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="AboutUserUi.GenderFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_margin="20dp"
+        android:orientation="vertical"
+        >
 
-</FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Step 3 of 8"
+            android:textColor="#191919"
+            android:textSize="18dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="How Old Are You?"
+            android:textColor="#191919"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.shawnlin.numberpicker.NumberPicker
+            android:layout_width="70dp"
+            android:layout_height="500dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:np_width="64dp"
+            app:np_height="180dp"
+            app:np_dividerColor="@color/black"
+                app:np_max="100"
+            app:np_min="10"
+            app:np_selectedTextColor="@color/black"
+            app:np_selectedTextSize="30dp"
+            app:np_textColor="@color/black"
+            app:np_textSize="25dp"
+            app:np_value="3"
+                app:np_wheelItemCount="7"
+            />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+    </LinearLayout>
+</RelativeLayout>
