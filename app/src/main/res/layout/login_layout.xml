@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bottomdialog"
+    >
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/i1"
+        android:background="@drawable/google_bg"
+        android:src="@drawable/google"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:layout_centerHorizontal="true"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Continue with Google"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_below="@id/i1"
+        android:id="@+id/t1"
+        android:layout_marginBottom="10dp"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Synchronize your data"
+        android:textColor="@color/black"
+        android:layout_below="@id/t1"
+        android:id="@+id/t2"
+        android:layout_marginBottom="10dp"
+        android:layout_centerHorizontal="true"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:textStyle="bold"
+        android:text="Login"
+        android:textColor="@color/white"
+        android:id="@+id/login"
+        android:background="@drawable/loginbtn"
+        android:layout_below="@id/t2"
+        />
+</RelativeLayout>

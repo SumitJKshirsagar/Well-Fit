@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -13,63 +13,76 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ecl"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+       />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/red"
         app:tint="#B0C929"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        />
+  <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="1000px"
+      android:src="@drawable/girl"
+      android:layout_centerInParent="true"
+      android:id="@+id/i1"
+      android:layout_marginTop="100dp"
+      />
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="10dp"
-        android:orientation="vertical">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="500dp"
-            android:layout_marginTop="50dp"
-            android:src="@drawable/wel"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_above="@id/t1"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/l1">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="We train your body to be"
-            android:textColor="#000000"
-            android:textSize="16dp"
-            android:layout_gravity="center_horizontal"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" great and fit."
-            android:textColor="#000000"
-            android:textSize="16dp"
-            android:layout_gravity="center_horizontal"/>
-
-        <Button
-            android:id="@+id/ls"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:paddingLeft="40dp"
-            android:paddingRight="40dp"
-            android:text="Let's Start"
+            android:text="WELL"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:textColor="@color/white"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/loginbtn"/>
-
-
-
+            android:textColor="#B0C929"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="#B0C929"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FIT"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
     </LinearLayout>
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="FIT, SLEEP, REPEAT"
+        android:id="@+id/t1"
+        android:layout_above="@id/next"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="40dp"
+        android:textColor="@color/black"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/next"
+        android:text="Let's Start"
+        android:background="@drawable/button1"
+        android:textColor="@color/white"
+        android:layout_marginRight="100dp"
+        android:layout_marginLeft="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="40dp"
+        />
+</RelativeLayout>
