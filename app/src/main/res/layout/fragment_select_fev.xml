@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/_15sdp"
+        android:layout_margin="20dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,33 +22,33 @@
             android:layout_height="wrap_content"
             android:text="Step 1 of 8"
             android:textColor="#191919"
-            android:textSize="@dimen/_15ssp" />
+            android:textSize="18dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Select Your Favorite"
             android:textColor="#191919"
-            android:textSize="@dimen/_22ssp"
+            android:textSize="30dp"
             android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_150sdp"
-            android:layout_marginTop="@dimen/_40sdp"
+            android:layout_height="180dp"
+            android:layout_marginTop="50dp"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal"
             android:weightSum="2">
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/_150sdp"
+                android:layout_height="180dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_130sdp"
+                    android:layout_height="150dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/dot_active" />
 
@@ -58,19 +58,20 @@
                     android:layout_gravity="center_horizontal"
                     android:text="Cycling"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_15ssp" />
+                    android:textSize="18dp" />
 
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/_150sdp"
+                android:layout_height="180dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_130sdp"
+                    android:layout_height="150dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/dot_active" />
 
@@ -80,8 +81,7 @@
                     android:layout_gravity="center_horizontal"
                     android:text="Cycling"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_15ssp" />
-
+                    android:textSize="18dp" />
 
             </LinearLayout>
 
@@ -89,20 +89,20 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_150sdp"
+            android:layout_height="180dp"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal"
             android:weightSum="2">
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/_150sdp"
+                android:layout_height="180dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_130sdp"
+                    android:layout_height="150dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/dot_active" />
 
@@ -112,20 +112,20 @@
                     android:layout_gravity="center_horizontal"
                     android:text="Cycling"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_15ssp" />
+                    android:textSize="18dp" />
 
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/_150sdp"
+                android:layout_height="180dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_130sdp"
+                    android:layout_height="150dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/dot_active" />
 
@@ -135,28 +135,28 @@
                     android:layout_gravity="center_horizontal"
                     android:text="Cycling"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_15ssp" />
-
+                    android:textSize="18dp" />
 
             </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_150sdp"
+            android:layout_height="180dp"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal"
             android:weightSum="2">
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/_150sdp"
+                android:layout_height="180dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_130sdp"
+                    android:layout_height="150dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/dot_active" />
 
@@ -166,20 +166,20 @@
                     android:layout_gravity="center_horizontal"
                     android:text="Cycling"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_15ssp" />
+                    android:textSize="18dp" />
 
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/_150sdp"
+                android:layout_height="180dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_130sdp"
+                    android:layout_height="150dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/dot_active" />
 
@@ -189,10 +189,10 @@
                     android:layout_gravity="center_horizontal"
                     android:text="Cycling"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_15ssp" />
-
+                    android:textSize="18dp" />
 
             </LinearLayout>
+
         </LinearLayout>
 
 
