@@ -1,4 +1,14 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_checked="true" android:drawable="@drawable/toggle_on" />
-    <item android:state_checked="false" android:drawable="@drawable/tog_off" />
+    <item android:state_checked="true"
+        android:state_enabled="true"
+        android:drawable="@drawable/toggle_on" />
+    <item android:state_checked="true"
+        android:state_enabled="false"
+        android:drawable="@drawable/tog_off" />
+    <item android:state_checked="false"
+        android:state_enabled="false"
+        android:drawable="@drawable/tog_off" />
+    <item android:state_checked="false"
+        android:state_enabled="true"
+        android:drawable="@drawable/tog_off" />
 </selector>
