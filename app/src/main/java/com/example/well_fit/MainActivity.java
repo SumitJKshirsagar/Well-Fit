@@ -31,6 +31,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
+import AboutUserUi.FragmentContainer;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 9001;
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
-    Button next;
+    Button next,test;
 
     ImageView i1;
 
@@ -58,8 +60,18 @@ public class MainActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         next = findViewById(R.id.next);
+        test = findViewById(R.id.testing_button);
         //i1 = findViewById ( R.id.i1 );
 
+
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Widget.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

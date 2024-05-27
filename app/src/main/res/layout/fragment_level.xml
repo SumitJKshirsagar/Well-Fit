@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="20dp"
+        android:layout_margin="@dimen/_15sdp"
         android:orientation="vertical"
         >
         <TextView
@@ -16,14 +16,14 @@
             android:layout_height="wrap_content"
             android:text="Step 6 of 8"
             android:textColor="#191919"
-            android:textSize="18dp" />
+            android:textSize="@dimen/_15ssp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="What's Your Fitness Level?"
             android:textColor="#191919"
-            android:textSize="29dp"
+            android:textSize="@dimen/_22ssp"
             android:textStyle="bold" />
             <LinearLayout
                 android:id="@+id/ll"
@@ -35,23 +35,23 @@
                     android:id="@+id/Maletxt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="200dp"
+                    android:layout_marginTop="@dimen/_150sdp"
                     android:layout_gravity="center"
                     android:textAlignment="center"
-                    android:textSize="25dp"
+                    android:textSize="@dimen/_20ssp"
+                    android:padding="@dimen/_15ssp"
                     android:background="@drawable/black_bg"
                     android:textColor="@color/white"
-                    android:padding="20dp"
                     android:text="Beginner" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:textSize="25dp"
+                    android:textSize="@dimen/_20ssp"
+                    android:padding="@dimen/_15ssp"
                     android:textAlignment="center"
                     android:background="@drawable/txtbg"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="@dimen/_15sdp"
                     android:textColor="#303841"
                     android:text="Intermediate"/>
 
@@ -59,12 +59,12 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:textSize="25dp"
+                    android:textSize="@dimen/_20ssp"
+                    android:padding="@dimen/_15ssp"
                     android:textAlignment="center"
                     android:background="@drawable/txtbg"
                     android:textColor="#303841"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginTop="@dimen/_30sdp"
                     android:text="Advanced"/>
 
 

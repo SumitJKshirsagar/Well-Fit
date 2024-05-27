@@ -1,7 +1,10 @@
 package com.example.well_fit;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -9,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import com.bumptech.glide.Glide;
@@ -25,9 +29,8 @@ public class home extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     FrameLayout frameLayout;
     FirebaseAuth mAuth;
-    CircleImageView dp;
+    ImageView dp;
     TextView username, time;
-    ImageView history;
     FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +40,17 @@ public class home extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom);
         frameLayout = findViewById(R.id.fragment);
         username = findViewById(R.id.username);
-        time = findViewById(R.id.time);
-        history = findViewById(R.id.history);
-        dp = findViewById(R.id.userdp);
+        time = findViewById(R.id.greetings_txt);
+        dp = findViewById(R.id.profile_img);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.PrimaryColor));
+        }
 
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
