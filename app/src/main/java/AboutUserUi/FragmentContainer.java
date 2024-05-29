@@ -51,6 +51,7 @@ public class FragmentContainer extends AppCompatActivity {
                 if(currentFragmentIndex == 0){
                     previousButton.setVisibility(View.INVISIBLE);
                 }
+
             }
         });
 
@@ -82,16 +83,15 @@ public class FragmentContainer extends AppCompatActivity {
                 } else if (currentFragmentIndex == 7) {
                     skip.setVisibility(View.INVISIBLE);
                     nextButton.setText("GET STARTED!");
-
-                    Intent intent = new Intent(FragmentContainer.this, home.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-
                 }else {
                     nextButton.setText("NEXT STEP");
                     skip.setVisibility(View.VISIBLE);
                 }
-
+                if(currentFragmentIndex == 7){
+                    Intent intent = new Intent(FragmentContainer.this, home.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
 
             }
         });

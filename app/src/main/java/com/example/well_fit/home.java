@@ -26,32 +26,31 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import java.util.Calendar;
 
 public class home extends AppCompatActivity {
+
     BottomNavigationView bottomNavigationView;
-    FrameLayout frameLayout;
-    FirebaseAuth mAuth;
-    ImageView dp;
-    TextView username, time;
-    FirebaseFirestore db;
+    private HomeFragment homeFragment;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
 
-        bottomNavigationView = findViewById(R.id.bottom);
-        frameLayout = findViewById(R.id.fragment);
-        username = findViewById(R.id.username);
-        time = findViewById(R.id.greetings_txt);
-        dp = findViewById(R.id.profile_img);
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
+        homeFragment = HomeFragment.newInstance();
 
-
+        // Set the status bar color
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(ContextCompat.getColor(this, R.color.PrimaryColor));
+            window.setStatusBarColor(getResources().getColor(R.color.PrimaryColor));
         }
+        setContentView(R.layout.activity_home);
 
+
+        FragmentTransaction beginTransaction = getSupportFragmentManager().beginTransaction();
+        beginTransaction.replace(R.id.fragment,homeFragment);
+        beginTransaction.commit();
+
+        bottomNavigationView = findViewById(R.id.bottom);
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -80,57 +79,8 @@ public class home extends AppCompatActivity {
             }
         });
 
-        // Load the default fragment
-        if (savedInstanceState == null) {
-            bottomNavigationView.setSelectedItemId(R.id.home);
-        }
 
-        // Load user's data and set time
-        loadUserData();
-        setTimeGreeting();
-    }
-
-    private void loadUserData() {
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            String userEmail = currentUser.getEmail();
-            // Fetch additional data from Firestore
-            db.collection("users")
-                    .whereEqualTo("email", userEmail)
-                    .get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            // There should be only one document corresponding to the user's email
-                            DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
-                            // Update UI elements with fetched data
-                            String userName = documentSnapshot.getString("name");
-                            String userImageUrl = documentSnapshot.getString("photoUrl");
-                            username.setText(userName + "!");
-                            Glide.with(home.this).load(userImageUrl).into(dp);
-                        }
-                    })
-                    .addOnFailureListener(e -> {
-                        // Handle failure
-                    });
-        }
-    }
+}
 
 
-    private void setTimeGreeting() {
-        Calendar calendar = Calendar.getInstance();
-        int timeOfDay = calendar.get(Calendar.HOUR_OF_DAY);
-
-        String greetingMessage;
-        if (timeOfDay >= 0 && timeOfDay < 12) {
-            greetingMessage = "Hello, Good Morning";
-        } else if (timeOfDay >= 12 && timeOfDay < 16) {
-            greetingMessage = "Hello, Good Afternoon";
-        } else if (timeOfDay >= 16 && timeOfDay < 21) {
-            greetingMessage = "Hello, Good Evening";
-        } else {
-            greetingMessage = "Hello, Good Night";
-        }
-
-        time.setText(greetingMessage);
-    }
 }
