@@ -97,6 +97,7 @@
                     android:textSize="@dimen/_30ssp"
                     android:textAlignment="center"
                     android:gravity="center"
+                    android:id="@+id/e1"
                     android:maxEms="3"
                     android:inputType="number"/>
 

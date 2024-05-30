@@ -1,66 +1,106 @@
 package AboutUserUi;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.example.well_fit.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HeightFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HeightFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public HeightFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HeightFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HeightFragment newInstance(String param1, String param2) {
-        HeightFragment fragment = new HeightFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private String userId;
+    private EditText e1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_height, container, false);
+        View view = inflater.inflate(R.layout.fragment_height, container, false);
+        e1 = view.findViewById(R.id.e1);
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            userId = currentUser.getUid();
+            checkUser();
+        } else {
+            // Handle case where there is no user logged in
+            Toast.makeText(getActivity(), "No user logged in", Toast.LENGTH_SHORT).show();
+        }
+
+        e1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // No action needed before text changes
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // No action needed while text changes
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String height = s.toString();
+                if (!height.isEmpty()) {
+                    saveHeightToFirestore(height);
+                } else {
+                    Toast.makeText(getActivity(), "Please enter your height", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        return view;
+    }
+
+    private void checkUser() {
+        DocumentReference userRef = db.collection("users").document(userId);
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        // User document exists, you can perform additional checks or setup if needed
+                    } else {
+                        // Handle case where user document does not exist
+                        Toast.makeText(getActivity(), "User data not found", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    // Handle failure to access Firestore
+                    Toast.makeText(getActivity(), "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void saveHeightToFirestore(String height) {
+        DocumentReference userRef = db.collection("users").document(userId);
+        userRef.update("height", height).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                } else {
+                    Toast.makeText(getActivity(), "Failed to update height", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }

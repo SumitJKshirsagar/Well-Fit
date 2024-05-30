@@ -94,6 +94,7 @@
                 android:background="@color/white"
                 android:textColor="#303841"
                 android:textSize="@dimen/_30ssp"
+                android:id="@+id/e1"
                 android:textAlignment="center"
                 android:gravity="center"
                 android:maxEms="3"

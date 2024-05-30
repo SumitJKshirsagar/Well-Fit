@@ -32,7 +32,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/Maletxt"
+                    android:id="@+id/beginner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_150sdp"
@@ -50,6 +50,7 @@
                     android:textSize="@dimen/_20ssp"
                     android:padding="@dimen/_15ssp"
                     android:textAlignment="center"
+                    android:id="@+id/intermediate"
                     android:background="@drawable/txtbg"
                     android:layout_marginTop="@dimen/_15sdp"
                     android:textColor="#303841"
@@ -62,6 +63,7 @@
                     android:textSize="@dimen/_20ssp"
                     android:padding="@dimen/_15ssp"
                     android:textAlignment="center"
+                    android:id= "@+id/advanced"
                     android:background="@drawable/txtbg"
                     android:textColor="#303841"
                     android:layout_marginTop="@dimen/_30sdp"

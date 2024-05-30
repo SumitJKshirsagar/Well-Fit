@@ -25,56 +25,59 @@
             android:textColor="#191919"
             android:textSize="@dimen/_22ssp"
             android:textStyle="bold" />
+
         <LinearLayout
             android:id="@+id/ll"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_100sdp"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/Maletxt"
+                android:id="@+id/beginner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_150sdp"
                 android:layout_gravity="center"
-                android:textAlignment="center"
-                android:textSize="@dimen/_20ssp"
                 android:background="@drawable/txtbg"
-                android:textColor="#303841"
                 android:drawableLeft="@drawable/scale"
                 android:drawableTint="#303841"
                 android:padding="@dimen/_15sdp"
-                android:text="Weight Loss" />
+                android:text="Weight Loss"
+                android:textAlignment="center"
+                android:textColor="#303841"
+                android:textSize="@dimen/_20ssp" />
 
             <TextView
+                android:id="@+id/intermediate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/_15sdp"
-                android:textSize="@dimen/_20ssp"
-                android:textAlignment="center"
-                android:background="@drawable/txtbg"
                 android:layout_marginTop="@dimen/_15sdp"
-                android:textColor="#303841"
+                android:background="@drawable/txtbg"
                 android:drawableLeft="@drawable/muscle"
                 android:drawableTint="#303841"
-                android:text="Gain Muscle"/>
+                android:padding="@dimen/_15sdp"
+                android:text="Gain Muscle"
+                android:textAlignment="center"
+                android:textColor="#303841"
+                android:textSize="@dimen/_20ssp" />
 
 
             <TextView
+                android:id="@+id/advanced"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_35sdp"
+                android:background="@drawable/txtbg"
+                android:drawableLeft="@drawable/dumbell"
+                android:drawableTint="@color/black"
                 android:gravity="center"
                 android:padding="@dimen/_15sdp"
-                android:textSize="@dimen/_20ssp"
-                android:textAlignment="center"
-                android:background="@drawable/black_bg"
-                android:textColor="@color/white"
-                android:layout_marginTop="@dimen/_35sdp"
                 android:text="Improve Fitness"
-                android:drawableLeft="@drawable/dumbell"
-                android:drawableTint="@color/white"
-                />
-
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_20ssp" />
 
 
         </LinearLayout>
