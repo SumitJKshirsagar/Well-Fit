@@ -1,20 +1,18 @@
 package com.example.well_fit;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,8 +30,10 @@ public class HomeFragment extends Fragment {
     private ImageView dp;
     private TextView username, time;
     private FirebaseFirestore db;
-    private RecyclerView recyclerView;
+    private RecyclerView categoryRecyclerView;
+    private RecyclerView suggestRecyclerView;
     private CategoryAdapter categoryAdapter;
+    private SuggestAdapter suggestAdapter;
     private List<Category> categoryList;
 
     public HomeFragment() {
@@ -50,8 +50,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
     }
 
     @Override
@@ -69,17 +67,26 @@ public class HomeFragment extends Fragment {
         username = view.findViewById(R.id.username);
         time = view.findViewById(R.id.greetings_txt);
         dp = view.findViewById(R.id.profile_img);
-        recyclerView = view.findViewById(R.id.category_rv);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        categoryRecyclerView = view.findViewById(R.id.category_rv);
+        suggestRecyclerView = view.findViewById(R.id.suggest_rv);
         categoryList = new ArrayList<>();
         categoryAdapter = new CategoryAdapter(getContext(), categoryList);
-        recyclerView.setAdapter(categoryAdapter);
+        suggestAdapter = new SuggestAdapter(getContext(), categoryList);
+
+        // Set up RecyclerViews
+        categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        categoryRecyclerView.setAdapter(categoryAdapter);
+
+        suggestRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        suggestRecyclerView.setAdapter(suggestAdapter);
 
         // Load user's data and set time
         loadUserData();
         setTimeGreeting();
         loadCategories();
+        loadSuggestions();
     }
 
     private void loadUserData() {
@@ -133,15 +140,33 @@ public class HomeFragment extends Fragment {
                         for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
                             String name = document.getString("name");
                             String imageUrl = document.getString("imageUrl");
-                            String id = document.getString ("id");
-                            categoryList.add(new Category( name, imageUrl, id));
+                            String id = document.getId(); // Assuming each document ID is the category ID
+                            categoryList.add(new Category(name, imageUrl, id));
                         }
                         categoryAdapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(e -> {
                     // Handle failure
-                    Toast.makeText(getContext(), e.getMessage (), Toast.LENGTH_LONG).show();
+                });
+    }
+
+    private void loadSuggestions() {
+        db.collection("homeworkout")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                            String name = document.getString("name");
+                            String imageUrl = document.getString("imageUrl");
+                            String id = document.getId(); // Assuming each document ID is the suggestion ID
+                            categoryList.add(new Category (name, imageUrl, id));
+                        }
+                        suggestAdapter.notifyDataSetChanged();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Handle failure
                 });
     }
 }

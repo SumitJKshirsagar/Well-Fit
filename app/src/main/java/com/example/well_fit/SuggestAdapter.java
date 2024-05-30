@@ -1,51 +1,43 @@
 package com.example.well_fit;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
-import de.hdodenhof.circleimageview.CircleImageView;
+import com.example.well_fit.R;
+
 import java.util.List;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class SuggestAdapter extends RecyclerView.Adapter<SuggestAdapter.ViewHolder> {
 
     private List<Category> categoryList;
     private Context context;
 
-    public CategoryAdapter(Context context, List<Category> categoryList) {
+    public SuggestAdapter(Context context, List<Category> categoryList) {
         this.context = context;
         this.categoryList = categoryList;
     }
 
     @NonNull
     @Override
-    public CategoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SuggestAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.category, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SuggestAdapter.ViewHolder holder, int position) {
         Category category = categoryList.get(position);
         holder.name.setText(category.getName());
         Glide.with(context).load(category.getImageUrl()).into(holder.img);
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, Phase1.class);
-                intent.putExtra("category_id", category.getId()); // Pass category ID if needed
-                Toast.makeText ( context , category.getId () , Toast.LENGTH_SHORT ).show ( );
-                context.startActivity(intent);
-            }
-        });
     }
 
     @Override

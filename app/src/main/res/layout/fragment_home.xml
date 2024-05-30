@@ -2,7 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -150,7 +150,7 @@
                 android:id="@+id/txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SELECT YOUR GOAL"
+                android:text="Our suggestion"
                 app:layout_constraintTop_toBottomOf="@+id/img"
                 app:layout_constraintStart_toStartOf="parent"
                 android:textSize="@dimen/_15ssp"
@@ -159,7 +159,7 @@
                 android:layout_marginLeft="@dimen/_15sdp"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/horizontal_rv"
+                android:id="@+id/suggest_rv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -173,7 +173,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/horizontal_rv"
+                app:layout_constraintTop_toBottomOf="@+id/suggest_rv"
                 app:layout_constraintStart_toStartOf="parent">
 
 
@@ -195,6 +195,7 @@
                     android:textAlignment="textEnd"
                     android:textSize="@dimen/_15ssp"
                     android:textStyle="bold"
+                    android:id="@+id/see"
                     android:textColor="@color/black"
                     android:layout_margin="@dimen/_15sdp"/>
 
