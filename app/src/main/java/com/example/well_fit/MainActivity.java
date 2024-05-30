@@ -5,13 +5,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -26,12 +24,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import AboutUserUi.FragmentContainer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,9 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
-    Button next,test;
-
-    ImageView i1;
+    Button next, test;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +45,17 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
+        // Check if user is already signed in
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            // User is signed in, redirect to home activity
+            startActivity(new Intent(MainActivity.this, home.class));
+            finish();
+            return;
+        }
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("175420533027-bo1bb61dg6b8mpm7249mnrsvu0as4g4s.apps.googleusercontent.com")
+                .requestIdToken("YOUR_CLIENT_ID.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
 
@@ -61,8 +63,6 @@ public class MainActivity extends AppCompatActivity {
 
         next = findViewById(R.id.next);
         test = findViewById(R.id.testing_button);
-        //i1 = findViewById ( R.id.i1 );
-
 
         test.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,12 +72,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(MainActivity.this);
                 View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.login_layout, null);
-                Button login = view.findViewById(R.id.login); // Assuming the TextView id is "text" in your layout
+                Button login = view.findViewById(R.id.login);
                 login.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -88,28 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 bottomSheetDialog.show();
             }
         });
-        //loadImageFromFirestore();
     }
-
-    /*private void loadImageFromFirestore ( ) {
-            db.collection("user_ui")
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (document.contains("temp1")) {
-                                    String imageUrl = document.getString("temp1");
-                                    // Load the image using Glide
-                                    Glide.with(MainActivity.this)
-                                            .load(imageUrl)
-                                            .into(i1);
-                                }
-                            }
-                        } else {
-                            // Handle the error
-                        }
-                    });
-    }*/
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -120,15 +100,12 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                // Google Sign-In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                // Google Sign-In failed
                 Toast.makeText(MainActivity.this, "Google sign in failed", Toast.LENGTH_SHORT).show();
             }
         }
@@ -141,13 +118,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<com.google.firebase.auth.AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            // Update Firestore with the user's information
                             storeUserInformation(user);
                             updateUI(user);
                         } else {
-                            // If sign in fails, display a message to the user.
                             Toast.makeText(MainActivity.this, "Authentication Failed.", Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
@@ -175,11 +149,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            startActivity(new Intent(MainActivity.this, Widget.class));
+            startActivity(new Intent(MainActivity.this, home.class));
+            finish();
         } else {
-
+            // Stay on the current activity
         }
     }
-
 }
-
