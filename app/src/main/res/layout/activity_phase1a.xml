@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Phase1">
+    tools:context=".Phase1a">
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="@dimen/_200sdp"
@@ -13,6 +13,7 @@
         android:src="@drawable/wellfit"
         android:id="@+id/phase1"
         />
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,7 +21,8 @@
         android:id="@+id/back"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_margin="@dimen/_5sdp"/>
+        android:layout_margin="@dimen/_5sdp"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,7 +37,24 @@
         android:layout_marginLeft="@dimen/_5sdp"
         android:layout_marginTop="@dimen/_120sdp"
         />
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/total"
+        android:padding="@dimen/_5sdp"
+        android:background="@drawable/txtbg"
+        android:text="Total time: 20 min"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_15ssp"
+        android:layout_below="@id/phase1"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/display"
+        android:layout_above="@id/start"
+        android:layout_below="@id/total"
+        />
     <Button
         android:id="@+id/start"
         android:layout_width="match_parent"

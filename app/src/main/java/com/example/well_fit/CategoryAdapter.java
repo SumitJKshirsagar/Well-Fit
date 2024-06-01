@@ -42,7 +42,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             public void onClick(View v) {
                 Intent intent = new Intent(context, Phase1.class);
                 intent.putExtra("category_id", category.getId()); // Pass category ID if needed
-                Toast.makeText ( context , category.getId () , Toast.LENGTH_SHORT ).show ( );
                 context.startActivity(intent);
             }
         });

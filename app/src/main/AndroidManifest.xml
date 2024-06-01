@@ -13,6 +13,12 @@
         android:theme="@style/Theme.WellFit"
         tools:targetApi="31">
         <activity
+            android:name=".Phase2"
+            android:exported="false" />
+        <activity
+            android:name=".Phase1a"
+            android:exported="false" />
+        <activity
             android:name=".Phase1"
             android:exported="false" />
         <activity

@@ -1,6 +1,7 @@
 package com.example.well_fit;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +19,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SuggestAdapter extends RecyclerView.Adapter<SuggestAdapter.ViewHolder> {
 
-    private List<Category> categoryList;
+    private List<Suggest> suggestList;
     private Context context;
 
-    public SuggestAdapter(Context context, List<Category> categoryList) {
+    public SuggestAdapter(Context context, List<Suggest> suggestList) {
         this.context = context;
-        this.categoryList = categoryList;
+        this.suggestList = suggestList;
     }
 
     @NonNull
@@ -35,14 +36,23 @@ public class SuggestAdapter extends RecyclerView.Adapter<SuggestAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull SuggestAdapter.ViewHolder holder, int position) {
-        Category category = categoryList.get(position);
+        Suggest category = suggestList.get(position);
         holder.name.setText(category.getName());
         Glide.with(context).load(category.getImageUrl()).into(holder.img);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, Phase1a.class);
+                intent.putExtra("category_id", category.getId()); // Pass category ID if needed
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return categoryList.size();
+        return suggestList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

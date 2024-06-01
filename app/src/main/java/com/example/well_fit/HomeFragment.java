@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,17 +25,20 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import AboutUserUi.CategoryFragment;
+
 public class HomeFragment extends Fragment {
     private FrameLayout frameLayout;
     private FirebaseAuth mAuth;
     private ImageView dp;
-    private TextView username, time;
+    private TextView username, time, see;
     private FirebaseFirestore db;
     private RecyclerView categoryRecyclerView;
     private RecyclerView suggestRecyclerView;
     private CategoryAdapter categoryAdapter;
     private SuggestAdapter suggestAdapter;
     private List<Category> categoryList;
+    private List<Suggest> suggestList;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -66,14 +70,16 @@ public class HomeFragment extends Fragment {
         frameLayout = view.findViewById(R.id.fragment);
         username = view.findViewById(R.id.username);
         time = view.findViewById(R.id.greetings_txt);
+        see = view.findViewById(R.id.see);
         dp = view.findViewById(R.id.profile_img);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         categoryRecyclerView = view.findViewById(R.id.category_rv);
         suggestRecyclerView = view.findViewById(R.id.suggest_rv);
         categoryList = new ArrayList<>();
+        suggestList = new ArrayList<>();
         categoryAdapter = new CategoryAdapter(getContext(), categoryList);
-        suggestAdapter = new SuggestAdapter(getContext(), categoryList);
+        suggestAdapter = new SuggestAdapter(getContext(), suggestList);
 
         // Set up RecyclerViews
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -81,6 +87,14 @@ public class HomeFragment extends Fragment {
 
         suggestRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         suggestRecyclerView.setAdapter(suggestAdapter);
+
+        // Set the OnClickListener for the see button
+        see.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openCategoryFragment();
+            }
+        });
 
         // Load user's data and set time
         loadUserData();
@@ -157,10 +171,10 @@ public class HomeFragment extends Fragment {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
                         for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                            String name = document.getString("name");
-                            String imageUrl = document.getString("imageUrl");
-                            String id = document.getId(); // Assuming each document ID is the suggestion ID
-                            categoryList.add(new Category (name, imageUrl, id));
+                            String sname = document.getString("name");
+                            String simageUrl = document.getString("imageUrl");
+                            String sid = document.getId(); // Assuming each document ID is the suggestion ID
+                            suggestList.add(new Suggest(sname, simageUrl, sid));
                         }
                         suggestAdapter.notifyDataSetChanged();
                     }
@@ -168,5 +182,12 @@ public class HomeFragment extends Fragment {
                 .addOnFailureListener(e -> {
                     // Handle failure
                 });
+    }
+
+    private void openCategoryFragment() {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment, new CategoryFragment ()); // Replace 'CategoryFragment' with your actual fragment class name
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

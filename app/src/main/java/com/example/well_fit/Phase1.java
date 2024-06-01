@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ public class Phase1 extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private String uid;
+    TextView exercise;
     private ImageView back, work;
     private Button start;
     private String categoryId;
@@ -37,6 +39,7 @@ public class Phase1 extends AppCompatActivity {
         back = findViewById(R.id.back);
         work = findViewById(R.id.phase1);
         start = findViewById(R.id.start);
+        exercise = findViewById(R.id.exerciseName);
 
         // Get category ID from intent
         categoryId = getIntent().getStringExtra("category_id");
@@ -53,6 +56,7 @@ public class Phase1 extends AppCompatActivity {
         if (categoryId != null) {
             loadImageFromFirestore(categoryId);
             Toast.makeText ( this , categoryId , Toast.LENGTH_SHORT ).show ( );
+            exercise.setText ( categoryId );
         } else {
             Log.e(TAG, "No category ID found in intent");
         }
@@ -72,7 +76,6 @@ public class Phase1 extends AppCompatActivity {
                                 Glide.with(Phase1.this)
                                         .load(imageUrl)
                                         .into(work);
-                                Toast.makeText(Phase1.this, imageUrl, Toast.LENGTH_SHORT).show();
                                 Log.d(TAG, "Loaded image: " + imageUrl);
                             } else {
                                 Log.w(TAG, "Image URL is null or empty for category: " + categoryId);

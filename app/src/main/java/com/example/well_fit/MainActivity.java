@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("YOUR_CLIENT_ID.apps.googleusercontent.com")
+                .requestIdToken("175420533027-bo1bb61dg6b8mpm7249mnrsvu0as4g4s.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
 
@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            startActivity(new Intent(MainActivity.this, home.class));
+            startActivity(new Intent(MainActivity.this, Widget.class));
             finish();
         } else {
             // Stay on the current activity
