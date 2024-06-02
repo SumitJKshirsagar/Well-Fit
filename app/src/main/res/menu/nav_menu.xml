@@ -1,0 +1,54 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/group_divider">
+        <item android:title="Dashboard" />
+    </group>
+
+    <group android:id="@+id/group_divider2"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/plans"
+            android:icon="@drawable/dumbell"
+            android:title="Plans" />
+        <item
+            android:id="@+id/training"
+            android:icon="@drawable/muscle"
+            android:title="Training"
+
+            />
+        <item
+            android:id="@+id/category"
+            android:icon="@drawable/category_24dp_fill0_wght400_grad0_opsz24"
+            android:title="Categories" />
+    </group>
+    <group android:id="@+id/group_divider3"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/myaccount"
+            android:icon="@drawable/user"
+            android:title="My Account" />
+        <item
+            android:id="@+id/Myfev"
+            android:icon="@drawable/favorite_24dp_fill0_wght400_grad0_opsz24"
+            android:title="My Fevorites" />
+    </group>
+
+    <group android:id="@+id/group_divider4"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/AppSettings"
+            android:icon="@drawable/settings_24dp_fill0_wght400_grad0_opsz24"
+            android:title="App Settings" />
+        <item
+            android:id="@+id/ContactSupport"
+            android:icon="@drawable/phone_in_talk_24dp_fill0_wght400_grad0_opsz24"
+            android:title="Contact Support" />
+    </group>
+    <group android:id="@+id/group_divider5"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/SignOut"
+            android:icon="@drawable/logout_24dp_fill0_wght400_grad0_opsz24"
+            android:title="Sign Out" />
+
+    </group>
+</menu>

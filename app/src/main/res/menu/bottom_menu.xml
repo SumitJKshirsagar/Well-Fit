@@ -2,22 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:title="Home"
-        android:icon="@drawable/home"
+        android:icon="@drawable/home__3_"
         android:id="@+id/home"
         />
     <item
-        android:title="Dumbell"
+        android:title="Exercise"
         android:icon="@drawable/dumbell"
         android:id="@+id/dumbell"
         />
     <item
-        android:title="Discover"
-        android:icon="@drawable/discover"
+        android:title="Profile"
+        android:icon="@drawable/user"
         android:id="@+id/discover"
         />
     <item
         android:title="Settings"
-        android:icon="@drawable/setting"
+        android:icon="@drawable/settings_24dp_fill0_wght400_grad0_opsz24"
         android:id="@+id/setting"
         />
 
