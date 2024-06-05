@@ -1,4 +1,4 @@
-package com.example.well_fit;
+package UI;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.well_fit.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -48,7 +49,7 @@ public class home extends AppCompatActivity {
                 if (itemId == R.id.home) {
                     selectedFragment = new HomeFragment();
                 } else if (itemId == R.id.dumbell) {
-                    selectedFragment = new DumbellFragment ();
+                    selectedFragment = new DumbellFragment();
                 } else if (itemId == R.id.discover) {
                     selectedFragment = new ProfileFragment();
                 } else if (itemId == R.id.setting) {

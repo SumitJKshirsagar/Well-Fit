@@ -1,4 +1,4 @@
-package com.example.well_fit;
+package UI;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import com.example.well_fit.R;
+
+import UI.MainActivity;
 
 public class SettingFragment extends Fragment {
     TextView rem, log;

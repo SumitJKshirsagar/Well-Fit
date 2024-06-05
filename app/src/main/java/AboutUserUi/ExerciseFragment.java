@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.well_fit.Phase2;
+import UI.Phase2;
 import com.example.well_fit.R;
 
 public class ExerciseFragment extends Fragment {

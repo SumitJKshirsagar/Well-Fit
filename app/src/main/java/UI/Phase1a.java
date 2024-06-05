@@ -1,4 +1,4 @@
-package com.example.well_fit;
+package UI;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,12 +14,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import Models.Display;
+import com.example.well_fit.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import adapters.DisplayAdapter;
 
 public class Phase1a extends AppCompatActivity {
     private static final String TAG = "Phase1";

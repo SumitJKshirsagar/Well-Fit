@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Button;
-import com.example.well_fit.Phase2;
+import UI.Phase2;
 import com.example.well_fit.R;
 
 public class RestFragment extends Fragment {

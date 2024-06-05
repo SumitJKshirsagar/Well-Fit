@@ -1,9 +1,8 @@
-package com.example.well_fit;
+package UI;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -11,7 +10,10 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.well_fit.R;
+
 import AboutUserUi.FragmentContainer;
+import adapters.ViewAdapter;
 
 public class Widget extends AppCompatActivity {
 

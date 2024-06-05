@@ -1,4 +1,4 @@
-package com.example.well_fit;
+package adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
+
+import com.example.well_fit.R;
 
 public class ViewAdapter extends PagerAdapter {
     Context context;

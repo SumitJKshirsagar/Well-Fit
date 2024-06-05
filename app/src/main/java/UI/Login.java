@@ -1,4 +1,4 @@
-package com.example.well_fit;
+package UI;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.well_fit.R;
 
 public class Login extends AppCompatActivity {
 

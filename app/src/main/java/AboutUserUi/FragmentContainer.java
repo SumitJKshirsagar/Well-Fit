@@ -13,11 +13,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.well_fit.HomeFragment;
-import com.example.well_fit.MainActivity;
 import com.example.well_fit.R;
-import com.example.well_fit.Widget;
-import com.example.well_fit.home;
+
+import UI.home;
 
 
 public class FragmentContainer extends AppCompatActivity {

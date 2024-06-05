@@ -2,9 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="AboutUserUi.ExerciseFragment">
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
+        android:orientation="vertical"
         android:layout_height="match_parent">
         <ImageView
             android:layout_width="match_parent"
@@ -13,21 +15,19 @@
             android:layout_alignParentTop="true"
             android:src="@drawable/wellfit"
             />
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/container"
-            android:padding="10dp"
-            android:layout_below="@id/img"
-            android:layout_above="@id/skip"
-            >
+            android:layout_marginTop="@dimen/_20sdp"
+            android:orientation="vertical">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Exercise_name"
+                android:text="EXERCISE NAME"
                 android:gravity="center"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:layout_alignParentTop="true"
+                android:layout_marginBottom="@dimen/_40sdp"
                 android:textStyle="bold"
                 android:id="@+id/name"
                 android:textSize="@dimen/_20ssp"
@@ -39,8 +39,8 @@
                 android:text="x16"
                 android:gravity="center"
                 android:id="@+id/set"
-                android:layout_centerInParent="true"
-                android:textSize="@dimen/_25ssp"
+                android:layout_marginBottom="@dimen/_40sdp"
+                android:textSize="@dimen/_35ssp"
                 android:textColor="@color/black"
                 android:layout_gravity="center"
                 android:textStyle="bold"
@@ -49,17 +49,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Done"
-                android:layout_alignParentBottom="true"
                 android:backgroundTint="@color/PrimaryColor"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_15ssp"
                 android:textStyle="bold"
+                android:paddingLeft="@dimen/_55sdp"
+                android:paddingRight="@dimen/_60sdp"
                 android:id="@+id/next"
-                android:gravity="center"
+                android:drawableLeft="@drawable/ticl"
+                android:drawableTint="@color/white"
                 android:layout_marginLeft="@dimen/_50sdp"
                 android:layout_marginRight="@dimen/_50sdp"
                 android:background="@drawable/loginbtn"/>
-        </RelativeLayout>
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -67,13 +69,15 @@
                 android:id="@+id/skip"
                 android:text="Skip"
                 android:textSize="@dimen/_15ssp"
-                android:layout_margin="@dimen/_10sdp"
-                android:textColor="#555353"
-                android:drawablePadding="5dp"
-                android:gravity="center"
+                android:layout_marginRight="@dimen/_50sdp"
+                android:layout_marginTop="@dimen/_40sdp"
+                android:textColor="@color/grey"
+                android:drawablePadding="@dimen/_5sdp"
+                android:layout_gravity="end"
                 android:drawableLeft="@drawable/next_svgrepo_com_1_"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
+                android:drawableTint="@color/grey"
                 />
-    </RelativeLayout>
+        </LinearLayout>
+
+    </LinearLayout>
 </FrameLayout>

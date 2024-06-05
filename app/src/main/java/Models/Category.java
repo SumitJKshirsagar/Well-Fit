@@ -1,4 +1,4 @@
-package com.example.well_fit;
+package Models;
 
 public class Category {
     private String name;

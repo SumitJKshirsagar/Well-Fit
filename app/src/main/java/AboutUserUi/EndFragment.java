@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.well_fit.MainActivity;
+import UI.MainActivity;
 import com.example.well_fit.R;
 
 public class EndFragment extends Fragment {

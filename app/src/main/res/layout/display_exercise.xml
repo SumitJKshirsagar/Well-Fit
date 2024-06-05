@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/_5sdp"
-    android:background="@drawable/txtbg"
-    >
+    android:orientation="horizontal"
+    android:background="@drawable/divider_bg">
 <ImageView
     android:layout_width="@dimen/_100sdp"
     android:layout_height="@dimen/_100sdp"
+    android:layout_margin="@dimen/_5sdp"
     android:id="@+id/img"
     android:src="@drawable/ic_launcher_background" />
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:id="@+id/labels"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_margin="@dimen/_20sdp"
         android:layout_toEndOf="@id/img"
    >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Exercise Name"
+            android:text="EXERCISE NAME"
             android:textColor="@color/black"
+            android:layout_weight="0.3"
             android:textStyle="bold"
             android:id="@+id/name"
             android:textSize="@dimen/_15ssp"
@@ -30,17 +35,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="sets"
+            android:layout_weight="0.3"
             android:id="@+id/sets"
-            android:textColor="@color/black"
+            android:textColor="@color/grey"
             android:textSize="@dimen/_15ssp"
             />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="reps"
+            android:layout_weight="0.3"
             android:id="@+id/reps"
-            android:textColor="#474646"
+            android:textColor="@color/grey"
             android:textSize="@dimen/_15ssp"
             />
     </LinearLayout>
-</RelativeLayout>
+
+
+</LinearLayout>
