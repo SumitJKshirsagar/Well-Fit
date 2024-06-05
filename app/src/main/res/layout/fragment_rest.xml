@@ -3,11 +3,68 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="AboutUserUi.RestFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/container"
+            android:padding="10dp"
+            >
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Rest"
+                android:gravity="center"
+                android:layout_above="@id/set"
+                android:textSize="@dimen/_15ssp"
+                android:textColor="@color/black"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="02:00"
+                android:gravity="center"
+                android:id="@+id/set"
+                android:layout_centerInParent="true"
+                android:textSize="@dimen/_25ssp"
+                android:textColor="@color/black"
+                android:layout_gravity="center"
+                android:textStyle="bold"
+                />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="+20s"
+                android:backgroundTint="@color/PrimaryColor"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_15ssp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_above="@id/next"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:layout_marginLeft="@dimen/_50sdp"
+                android:layout_marginRight="@dimen/_50sdp"
+                android:background="@drawable/loginbtn"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="skip"
+                android:layout_alignParentBottom="true"
+                android:backgroundTint="@color/PrimaryColor"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_15ssp"
+                android:textStyle="bold"
+                android:id="@+id/next"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/_50sdp"
+                android:layout_marginRight="@dimen/_50sdp"
+                android:background="@drawable/loginbtn"/>
+        </RelativeLayout>
+    </RelativeLayout>
 </FrameLayout>
