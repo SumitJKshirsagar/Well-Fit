@@ -141,24 +141,44 @@ public class HomeFragment extends Fragment {
         adapter.setDropDownViewResource(R.layout.style_spinner);
         spinner.setAdapter(adapter);
 
+        // Fetch and set the user's current level
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            DocumentReference userRef = db.collection("users").document(currentUser.getUid());
+            userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful() && task.getResult().exists()) {
+                        String userLevel = task.getResult().getString("level");
+                        if (userLevel != null) {
+                            int spinnerPosition = adapter.getPosition(userLevel);
+                            spinner.setSelection(spinnerPosition);
+                        }
+                    } else {
+                        Toast.makeText(getActivity(), "Failed to fetch user level", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected ( AdapterView < ? > parentView , View selectedItemView , int position , long id ) {
-                String selectedLevel = parentView.getItemAtPosition ( position ).toString ( );
-                FirebaseUser currentUser = mAuth.getCurrentUser ( );
-                if ( currentUser != null ) {
-                    DocumentReference userRef = db.collection ( "users" ).document ( currentUser.getUid ( ) );
-                    saveLevelToFirestore ( userRef , selectedLevel );
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String selectedLevel = parentView.getItemAtPosition(position).toString();
+                FirebaseUser currentUser = mAuth.getCurrentUser();
+                if (currentUser != null) {
+                    DocumentReference userRef = db.collection("users").document(currentUser.getUid());
+                    saveLevelToFirestore(userRef, selectedLevel);
                 }
             }
 
             @Override
-            public void onNothingSelected ( AdapterView < ? > parent ) {
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
-
     }
+
 
     private void drawerLayoutToggle() {
         drawer.setOnClickListener(view -> {
