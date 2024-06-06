@@ -22,6 +22,8 @@ import com.bumptech.glide.Glide;
 import Models.Category;
 import com.example.well_fit.R;
 import Models.Suggest;
+
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,12 +36,15 @@ import java.util.List;
 import AboutUserUi.CategoryFragment;
 import adapters.CategoryAdapter;
 import adapters.SuggestAdapter;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeFragment extends Fragment {
     private FrameLayout frameLayout;
     private FirebaseAuth mAuth;
+
+    private CircleImageView img;
     private ImageView dp, drawer;
-    private TextView username, time, see;
+    private TextView username, time, see, user;
     private FirebaseFirestore db;
     private RecyclerView categoryRecyclerView;
     private RecyclerView suggestRecyclerView;
@@ -109,6 +114,11 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        NavigationView navigationView = view.findViewById(R.id.navigationView);
+        View headerView = navigationView.getHeaderView(0);
+        user = headerView.findViewById(R.id.user);
+        img = headerView.findViewById(R.id.profile_img);
+
         // Load user's data and set time
         loadUserData();
         setTimeGreeting();
@@ -148,7 +158,9 @@ public class HomeFragment extends Fragment {
                     String userName = documentSnapshot.getString("name");
                     String userImageUrl = documentSnapshot.getString("photoUrl");
                     username.setText(userName + "!");
+                    user.setText(userName);
                     Glide.with(HomeFragment.this).load(userImageUrl).into(dp);
+                    Glide.with(HomeFragment.this).load(userImageUrl).into(img);
                 }
             }).addOnFailureListener(e -> {
                 // Handle failure
