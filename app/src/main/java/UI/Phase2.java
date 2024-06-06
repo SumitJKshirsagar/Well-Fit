@@ -1,6 +1,9 @@
 package UI;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +31,7 @@ public class Phase2 extends AppCompatActivity {
     private int currentIndex = 0;
     private boolean showExerciseFragment = true;
     private String categoryId;
+    private String userId; // Variable to store user ID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,18 +42,39 @@ public class Phase2 extends AppCompatActivity {
         exerciseIds = new ArrayList<>();
         exercises = new ArrayList<>();
 
-        // Get the category ID from the intent
+        // Get the category ID and user ID from the intent
         categoryId = getIntent().getStringExtra("category_id");
+        userId = getIntent().getStringExtra("user_id"); // Assuming userId is passed via intent
 
-        if (categoryId != null) {
-            Toast.makeText(this, categoryId, Toast.LENGTH_SHORT).show();
-            fetchExercises();
+        if (categoryId != null && userId != null) {
+            fetchUserLevel(); // Fetch user level firs
         } else {
-            Toast.makeText(this, "Category ID not found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Category ID or User ID not found", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void fetchExercises() {
+    private void fetchUserLevel() {
+        db.collection("users").document(userId)
+                .get().addOnCompleteListener(userTask -> {
+                    if (userTask.isSuccessful()) {
+                        DocumentSnapshot userDocument = userTask.getResult();
+                        if (userDocument.exists()) {
+                            String userLevel = userDocument.getString("level");
+                            if (userLevel != null) {
+                                fetchExercises(userLevel);
+                            } else {
+                                Toast.makeText(this, "User level not found", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(this, "User document not found", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(this, "Failed to fetch user document", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void fetchExercises(String userLevel) {
         db.collection("homeworkout").document(categoryId)
                 .collection("workout").document("workout")
                 .get().addOnCompleteListener(task -> {
@@ -57,8 +82,7 @@ public class Phase2 extends AppCompatActivity {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             exerciseIds = (List<String>) document.get("id");
-                            Toast.makeText(this, exerciseIds.toString(), Toast.LENGTH_SHORT).show();
-                            fetchExerciseDetails();
+                            fetchExerciseDetails(userLevel); // Pass user's level to fetchExerciseDetails
                         } else {
                             Toast.makeText(this, "No exercises found", Toast.LENGTH_SHORT).show();
                         }
@@ -68,21 +92,44 @@ public class Phase2 extends AppCompatActivity {
                 });
     }
 
-    private void fetchExerciseDetails() {
+    private void fetchExerciseDetails(String userLevel) {
         for (String id : exerciseIds) {
             db.collection("Exercise").document(id).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Map<String, String> details = new HashMap<>();
-                        details.put("name", document.getString("name"));
-                        details.put("reps", document.getString("reps"));
-                        details.put("imageUrl", document.getString("imageUrl"));
-                        exercises.add(details);
+                    DocumentSnapshot exerciseDocument = task.getResult();
+                    if (exerciseDocument.exists()) {
+                        // Check if the exercise document has a subcollection "Level" instead of "levels"
+                        db.collection("Exercise").document(id)
+                                .collection("Level").document(userLevel).get()
+                                .addOnCompleteListener(levelTask -> {
+                                    if (levelTask.isSuccessful()) {
+                                        DocumentSnapshot levelDocument = levelTask.getResult();
+                                        if (levelDocument.exists()) {
+                                            String name = levelDocument.getString("name");
+                                            String reps = levelDocument.getString("reps");
+                                            String imageUrl = levelDocument.getString("imageUrl");
 
-                        if (exercises.size() == exerciseIds.size()) {
-                            displayNextFragment();
-                        }
+                                            if (name != null && reps != null && imageUrl != null) {
+                                                Map<String, String> details = new HashMap<>();
+                                                details.put("name", name);
+                                                details.put("reps", reps);
+                                                details.put("imageUrl", imageUrl);
+                                                exercises.add(details);
+
+                                                if (exercises.size() == exerciseIds.size()) {
+                                                    displayNextFragment();
+                                                }
+                                            } else {
+                                                Toast.makeText(this, "One of the required fields is null for exercise ID: " + id, Toast.LENGTH_SHORT).show();
+                                                Log.e(TAG, "One of the required fields is null for exercise ID: " + id);
+                                            }
+                                        } else {
+                                            Toast.makeText(this, "Exercise details not found for level: " + userLevel + " and ID: " + id, Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        Toast.makeText(this, "Failed to fetch exercise details for level: " + userLevel + " and ID: " + id, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                     } else {
                         Toast.makeText(this, "Exercise details not found for ID: " + id, Toast.LENGTH_SHORT).show();
                     }

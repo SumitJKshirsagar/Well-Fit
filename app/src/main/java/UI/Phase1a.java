@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import Models.Display;
 import com.example.well_fit.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -30,10 +31,12 @@ public class Phase1a extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private String uid;
-    TextView exercise;
+    private TextView exercise;
     private ImageView back, work;
     private Button start;
     private String categoryId;
+    private String userLevel;
+    private Intent intent;
 
     private RecyclerView display;
     private DisplayAdapter displayAdapter;
@@ -62,37 +65,61 @@ public class Phase1a extends AppCompatActivity {
 
         // Get category ID from intent
         categoryId = getIntent().getStringExtra("category_id");
+
         back.setOnClickListener(v -> {
             Intent intent = new Intent(Phase1a.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         });
 
-        // Load image based on category ID
         if (categoryId != null) {
             loadImageFromFirestore(categoryId);
-            loadExercise(categoryId);
-            exercise.setText(categoryId);
+            loadUserLevelAndExercises(categoryId);
         } else {
             Log.e(TAG, "No category ID found in intent");
             Toast.makeText(this, "No category ID found in intent", Toast.LENGTH_SHORT).show();
         }
 
-        start.setOnClickListener ( new View.OnClickListener ( ) {
+        start.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick ( View v ) {
-                Intent intent = new Intent ( Phase1a.this, Phase2.class );
-                intent.putExtra ( "category_id", categoryId );
-                startActivity ( intent );
+            public void onClick(View v) {
+
+                // Start Phase2 activity
+                intent = new Intent(Phase1a.this, Phase2.class);
+                intent.putExtra("category_id", categoryId);
+                intent.putExtra("user_id", uid);
+                startActivity(intent);
             }
-        } );
+        });
+
     }
 
-    private void loadExercise(String categoryId) {
+    private void loadUserLevelAndExercises(String categoryId) {
+        db.collection("users").document(uid).get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                userLevel = documentSnapshot.getString("level");
+                if (userLevel != null) {
+                    updateUserHistory(categoryId, userLevel);
+                    loadExercises(categoryId, userLevel);
+                    exercise.setText(categoryId);
+                } else {
+                    Toast.makeText(this, "User level not found", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "User level not found");
+                }
+            } else {
+                Toast.makeText(this, "User document not found", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "User document not found");
+            }
+        }).addOnFailureListener(e -> {
+            Log.e(TAG, "Error getting user level: ", e);
+        });
+    }
+
+    private void loadExercises(String categoryId, String userLevel) {
         db.collection("homeworkout")
                 .document(categoryId)
                 .collection("workout")
-                .document("workout") // Assuming 'workout' is the document ID for a specific workout
+                .document("workout")
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
@@ -100,8 +127,11 @@ public class Phase1a extends AppCompatActivity {
 
                         if (exerciseIds != null) {
                             for (String exerciseId : exerciseIds) {
+                                // Query the Exercise collection based on user's level
                                 db.collection("Exercise")
                                         .document(exerciseId)
+                                        .collection("Level")
+                                        .document(userLevel)
                                         .get()
                                         .addOnSuccessListener(exerciseSnapshot -> {
                                             if (exerciseSnapshot.exists()) {
@@ -112,16 +142,13 @@ public class Phase1a extends AppCompatActivity {
 
                                                 if (name != null && sets != null && reps != null && imageUrl != null) {
                                                     displayList.add(new Display(name, sets, reps, imageUrl));
-                                                    String toastMessage = "Exercise: " + name + "\nSets: " + sets + "\nReps: " + reps + "\nImage URL: " + imageUrl;
-                                                    Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
                                                 } else {
                                                     Toast.makeText(this, "One of the required fields is null", Toast.LENGTH_SHORT).show();
                                                     Log.e(TAG, "One of the required fields is null");
                                                 }
                                                 displayAdapter.notifyDataSetChanged();
                                             } else {
-                                                Toast.makeText(this, "Exercise document not found for ID: " + exerciseId, Toast.LENGTH_SHORT).show();
-                                                Log.d(TAG, "Exercise document not found for ID: " + exerciseId);
+                                                Log.d(TAG, "Exercise not found for user level: " + userLevel);
                                             }
                                         })
                                         .addOnFailureListener(e -> {
@@ -141,7 +168,6 @@ public class Phase1a extends AppCompatActivity {
                     Log.e(TAG, "Error getting workout document: ", e);
                 });
     }
-
 
 
     private void loadImageFromFirestore(String categoryId) {
@@ -169,4 +195,39 @@ public class Phase1a extends AppCompatActivity {
                     }
                 });
     }
+
+    private void updateUserHistory(String categoryId, String userLevel) {
+        // Create a reference to the user's document in Firestore
+        DocumentReference userRef = db.collection("users").document(uid);
+
+        // Get the current history list from Firestore
+        userRef.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                List<String> history = (List<String>) documentSnapshot.get("history");
+
+                // If history is null, initialize a new ArrayList
+                if (history == null) {
+                    history = new ArrayList<>();
+                }
+
+                // Add the new category ID to the history list
+                history.add(categoryId+" "+userLevel);
+
+                // Update the user's document with the updated history list
+                userRef.update("history", history)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "User history updated successfully");
+                            } else {
+                                Log.e(TAG, "Failed to update user history", task.getException());
+                            }
+                        });
+            } else {
+                Log.e(TAG, "User document does not exist");
+            }
+        }).addOnFailureListener(e -> {
+            Log.e(TAG, "Error getting user document", e);
+        });
+    }
+
 }
