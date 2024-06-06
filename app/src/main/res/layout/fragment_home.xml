@@ -117,6 +117,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/searchView"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_45sdp"
                     android:layout_marginLeft="@dimen/_18sdp"

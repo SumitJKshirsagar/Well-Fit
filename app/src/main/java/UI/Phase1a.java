@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -60,8 +61,12 @@ public class Phase1a extends AppCompatActivity {
         displayAdapter = new DisplayAdapter(Phase1a.this, displayList);
         display.setAdapter(displayAdapter);
 
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.recycleview_divider));
+
         display.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         display.setAdapter(displayAdapter);
+        display.addItemDecoration(dividerItemDecoration);
 
         // Get category ID from intent
         categoryId = getIntent().getStringExtra("category_id");

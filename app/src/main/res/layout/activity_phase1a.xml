@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -7,11 +7,38 @@
     android:background="@color/white"
     tools:context="UI.Phase1a">
 
-    <ImageView
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_220sdp"
+        android:background="@color/white"
+        android:elevation="@dimen/_10sdp">
+
+    <com.google.android.material.appbar.CollapsingToolbarLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="@dimen/_10sdp"
+        app:contentScrim="#B0C929"
+        app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_collapseMode="parallax">
+
+        <RelativeLayout
+            app:layout_collapseMode="parallax"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <ImageView
         android:layout_width="match_parent"
         android:layout_height="@dimen/_200sdp"
         android:layout_alignParentTop="true"
         android:src="@drawable/wellfit"
+        app:layout_collapseMode="parallax"
         android:id="@+id/phase1"
         />
 
@@ -20,6 +47,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/back"
         android:id="@+id/back"
+        app:layout_collapseMode="pin"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="@dimen/_5sdp"
@@ -42,46 +70,69 @@
         android:layout_marginTop="@dimen/_120sdp"
         />
 
-    <LinearLayout
-        android:id="@+id/total"
-        android:layout_below="@id/phase1"
-        android:layout_width="match_parent"
-        android:layout_marginLeft="@dimen/_16sdp"
-        android:background="@color/white"
-        android:layout_height="wrap_content">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/vertical_bar"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:padding="@dimen/_5sdp"
-        android:text="Total time: 20 min"
-        android:textColor="@color/grey"
-        android:textSize="@dimen/_15ssp"
-        />
-    </LinearLayout>
-    <androidx.recyclerview.widget.RecyclerView
+        </RelativeLayout>
+        </LinearLayout>
+
+    </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/display"
-        android:layout_above="@id/start"
-        android:layout_below="@id/total"
-        />
+        android:background="@color/white"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+     <androidx.constraintlayout.widget.ConstraintLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+
+         <LinearLayout
+             android:id="@+id/total"
+             android:layout_width="match_parent"
+             app:layout_constraintTop_toTopOf="parent"
+             app:layout_constraintLeft_toLeftOf="parent"
+             app:layout_constraintRight_toRightOf="parent"
+             android:layout_marginLeft="@dimen/_16sdp"
+             android:background="@color/white"
+             android:layout_height="wrap_content">
+
+             <ImageView
+                 android:layout_width="wrap_content"
+                 android:layout_height="match_parent"
+                 android:src="@drawable/vertical_bar"/>
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="1"
+                 android:padding="@dimen/_5sdp"
+                 android:text="Total time: 20 min"
+                 android:textColor="@color/grey"
+                 android:textSize="@dimen/_15ssp"
+                 />
+         </LinearLayout>
+         <androidx.recyclerview.widget.RecyclerView
+             app:layout_constraintTop_toBottomOf="@+id/total"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:id="@+id/display"
+             />
+
+
+     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
     <Button
         android:id="@+id/start"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
         android:background="@drawable/nextstepsbg"
         android:text="Start now"
         android:textSize="@dimen/_20ssp"
         android:textColor="@color/white"
-        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_gravity="bottom"
         android:layout_marginLeft="@dimen/_22sdp"
         android:layout_marginBottom="@dimen/_20sdp"
         android:layout_marginRight="@dimen/_22sdp"/>
-</RelativeLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

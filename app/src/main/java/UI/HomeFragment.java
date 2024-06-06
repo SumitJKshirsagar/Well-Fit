@@ -1,5 +1,6 @@
 package UI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -21,6 +23,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+
+import AboutUserUi.FragmentContainer;
 import Models.Category;
 import com.example.well_fit.R;
 import Models.Suggest;
@@ -59,6 +63,7 @@ public class HomeFragment extends Fragment {
     private List<Suggest> suggestList;
     private DrawerLayout drawerLayout;
     private Spinner spinner;
+    private CardView searchView;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -101,8 +106,13 @@ public class HomeFragment extends Fragment {
         suggestList = new ArrayList<>();
         categoryAdapter = new CategoryAdapter(getContext(), categoryList);
         suggestAdapter = new SuggestAdapter(getContext(), suggestList);
+        searchView = view.findViewById(R.id.searchView);
 
 
+        searchView.setOnClickListener(View->{
+
+            openSearchActivity();
+        });
 
         // Set up RecyclerViews
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -131,6 +141,11 @@ public class HomeFragment extends Fragment {
         loadSuggestions();
         drawerLayoutToggle();
         levelSpinner(view);
+    }
+
+    private void openSearchActivity() {
+        Intent intent = new Intent ( requireContext(), SearchActivity.class );
+        startActivity ( intent );
     }
 
     private void levelSpinner(View view) {
