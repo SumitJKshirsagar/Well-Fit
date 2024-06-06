@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,9 +25,12 @@ import Models.Category;
 import com.example.well_fit.R;
 import Models.Suggest;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -136,6 +141,23 @@ public class HomeFragment extends Fragment {
         adapter.setDropDownViewResource(R.layout.style_spinner);
         spinner.setAdapter(adapter);
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected ( AdapterView < ? > parentView , View selectedItemView , int position , long id ) {
+                String selectedLevel = parentView.getItemAtPosition ( position ).toString ( );
+                FirebaseUser currentUser = mAuth.getCurrentUser ( );
+                if ( currentUser != null ) {
+                    DocumentReference userRef = db.collection ( "users" ).document ( currentUser.getUid ( ) );
+                    saveLevelToFirestore ( userRef , selectedLevel );
+                }
+            }
+
+            @Override
+            public void onNothingSelected ( AdapterView < ? > parent ) {
+
+            }
+        });
+
     }
 
     private void drawerLayoutToggle() {
@@ -224,4 +246,19 @@ public class HomeFragment extends Fragment {
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
+    private void saveLevelToFirestore(DocumentReference userRef, String level) {
+        userRef.update("level", level).addOnCompleteListener(new OnCompleteListener <Void> () {
+            @Override
+            public void onComplete(@NonNull Task <Void> task) {
+                if (task.isSuccessful()) {
+                    // Optionally show a message
+                    // Toast.makeText(getActivity(), "Level updated", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Failed to update level", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
 }
