@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="UI.SearchActivity">
+
+  <androidx.cardview.widget.CardView
+      android:id="@+id/search_View"
+      android:layout_width="match_parent"
+      android:layout_margin="@dimen/_10sdp"
+      android:layout_height="wrap_content"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:cardCornerRadius="@dimen/_10sdp"
+     >
+
+      <EditText
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/_2sdp"
+          android:drawableStart="@drawable/search_24dp_fill0_wght400_grad0_opsz24"
+          android:background="@drawable/divider_bg"
+          android:drawableTint="@color/black"
+          android:drawablePadding="@dimen/_5sdp"
+          android:hint="Search"
+          android:textColor="@color/grey"
+          android:textColorHint="@color/grey"
+          android:textSize="@dimen/_15sdp"
+          android:padding="@dimen/_15sdp"/>
+
+
+  </androidx.cardview.widget.CardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/search_View"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:spanCount="3"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
