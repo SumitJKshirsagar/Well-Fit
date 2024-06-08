@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,10 +22,12 @@ import UI.Phase1a;
 public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHolder> {
     private List<Suggest> exerciseList;
     private Context context;
+    private String type;
 
-    public ExerciseAdapter(List<Suggest> exerciseList, Context context) {
+    public ExerciseAdapter(List<Suggest> exerciseList, Context context, String type) {
         this.exerciseList = exerciseList;
         this.context = context;
+        this.type = type;
     }
 
     @NonNull
@@ -41,6 +44,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, Phase1a.class);
             intent.putExtra("category_id", exercise.getId()); // Pass category ID if needed
+            intent.putExtra("type", type);
             context.startActivity(intent);
         });
     }
@@ -51,7 +55,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageButton img;
+        ImageView img;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

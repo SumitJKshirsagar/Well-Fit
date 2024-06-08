@@ -21,10 +21,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     private List<Category> categoryList;
     private Context context;
+    private String type;
 
-    public CategoryAdapter(Context context, List<Category> categoryList) {
+    public CategoryAdapter( Context context, List<Category> categoryList , String type ) {
         this.context = context;
         this.categoryList = categoryList;
+        this.type = type;
     }
 
     @NonNull
@@ -45,6 +47,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             public void onClick(View v) {
                 Intent intent = new Intent(context, Phase1.class);
                 intent.putExtra("category_id", category.getId()); // Pass category ID if needed
+                intent.putExtra("type", type);
                 context.startActivity(intent);
             }
         });

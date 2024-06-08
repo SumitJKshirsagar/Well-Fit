@@ -35,7 +35,7 @@ public class Phase1a extends AppCompatActivity {
     private TextView exercise;
     private ImageView back, work;
     private Button start;
-    private String categoryId;
+    private String categoryId, type;
     private String userLevel;
     private Intent intent;
 
@@ -70,6 +70,7 @@ public class Phase1a extends AppCompatActivity {
 
         // Get category ID from intent
         categoryId = getIntent().getStringExtra("category_id");
+        type = getIntent().getStringExtra("type");
 
         back.setOnClickListener(v -> {
             Intent intent = new Intent(Phase1a.this, MainActivity.class);
@@ -79,7 +80,7 @@ public class Phase1a extends AppCompatActivity {
 
         if (categoryId != null) {
             loadImageFromFirestore(categoryId);
-            loadUserLevelAndExercises(categoryId);
+            loadUserLevelAndExercises(categoryId, type);
         } else {
             Log.e(TAG, "No category ID found in intent");
             Toast.makeText(this, "No category ID found in intent", Toast.LENGTH_SHORT).show();
@@ -93,19 +94,20 @@ public class Phase1a extends AppCompatActivity {
                 intent = new Intent(Phase1a.this, Phase2.class);
                 intent.putExtra("category_id", categoryId);
                 intent.putExtra("user_id", uid);
+                intent.putExtra("type", type);
                 startActivity(intent);
             }
         });
 
     }
 
-    private void loadUserLevelAndExercises(String categoryId) {
+    private void loadUserLevelAndExercises(String categoryId, String type) {
         db.collection("users").document(uid).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 userLevel = documentSnapshot.getString("level");
                 if (userLevel != null) {
                     updateUserHistory(categoryId, userLevel);
-                    loadExercises(categoryId, userLevel);
+                    loadExercises(categoryId, userLevel, type);
                     exercise.setText(categoryId);
                 } else {
                     Toast.makeText(this, "User level not found", Toast.LENGTH_SHORT).show();
@@ -120,45 +122,49 @@ public class Phase1a extends AppCompatActivity {
         });
     }
 
-    private void loadExercises(String categoryId, String userLevel) {
+    private void loadExercises(String categoryId, String userLevel, String type) {
         db.collection("homeworkout")
-                .document(categoryId)
+                .document(type)
                 .collection("workout")
-                .document("workout")
+                .document(categoryId)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        List<String> exerciseIds = (List<String>) documentSnapshot.get("id");
+                        List<String> exerciseIds = (List<String>) documentSnapshot.get("ids");
 
                         if (exerciseIds != null) {
                             for (String exerciseId : exerciseIds) {
-                                // Query the Exercise collection based on user's level
-                                db.collection("Exercise")
-                                        .document(exerciseId)
-                                        .collection("Level")
-                                        .document(userLevel)
-                                        .get()
-                                        .addOnSuccessListener(exerciseSnapshot -> {
-                                            if (exerciseSnapshot.exists()) {
-                                                String name = exerciseSnapshot.getString("name");
-                                                String sets = exerciseSnapshot.getString("set");
-                                                String reps = exerciseSnapshot.getString("reps");
-                                                String imageUrl = exerciseSnapshot.getString("imageUrl");
+                                if (exerciseId != null && !exerciseId.isEmpty()) {  // Check if exerciseId is valid
+                                    // Query the Exercise collection based on user's level
+                                    db.collection("Exercise")
+                                            .document(exerciseId)
+                                            .collection("Level")
+                                            .document(userLevel)
+                                            .get()
+                                            .addOnSuccessListener(exerciseSnapshot -> {
+                                                if (exerciseSnapshot.exists()) {
+                                                    String name = exerciseSnapshot.getString("name");
+                                                    String sets = exerciseSnapshot.getString("set");
+                                                    String reps = exerciseSnapshot.getString("reps");
+                                                    String imageUrl = exerciseSnapshot.getString("imageUrl");
 
-                                                if (name != null && sets != null && reps != null && imageUrl != null) {
-                                                    displayList.add(new Display(name, sets, reps, imageUrl));
+                                                    if (name != null && sets != null && reps != null && imageUrl != null) {
+                                                        displayList.add(new Display(name, sets, reps, imageUrl));
+                                                    } else {
+                                                        Toast.makeText(this, "One of the required fields is null", Toast.LENGTH_SHORT).show();
+                                                        Log.e(TAG, "One of the required fields is null");
+                                                    }
+                                                    displayAdapter.notifyDataSetChanged();
                                                 } else {
-                                                    Toast.makeText(this, "One of the required fields is null", Toast.LENGTH_SHORT).show();
-                                                    Log.e(TAG, "One of the required fields is null");
+                                                    Log.d(TAG, "Exercise not found for user level: " + userLevel);
                                                 }
-                                                displayAdapter.notifyDataSetChanged();
-                                            } else {
-                                                Log.d(TAG, "Exercise not found for user level: " + userLevel);
-                                            }
-                                        })
-                                        .addOnFailureListener(e -> {
-                                            Log.e(TAG, "Error getting exercise document: ", e);
-                                        });
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Log.e(TAG, "Error getting exercise document: ", e);
+                                            });
+                                } else {
+                                    Log.e(TAG, "Invalid exerciseId: " + exerciseId);
+                                }
                             }
                         } else {
                             Toast.makeText(this, "No exercises found for the workout", Toast.LENGTH_SHORT).show();
@@ -173,6 +179,7 @@ public class Phase1a extends AppCompatActivity {
                     Log.e(TAG, "Error getting workout document: ", e);
                 });
     }
+
 
 
     private void loadImageFromFirestore(String categoryId) {

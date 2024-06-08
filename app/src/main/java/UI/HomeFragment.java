@@ -104,9 +104,9 @@ public class HomeFragment extends Fragment {
         categoryList = new ArrayList<>();
         suggestList = new ArrayList<>();
         exerciseList = new ArrayList<>();
-        categoryAdapter = new CategoryAdapter(getContext(), categoryList);
-        suggestAdapter = new SuggestAdapter(getContext(), suggestList);
-        exerciseAdapter = new ExerciseAdapter(exerciseList, getContext());
+        categoryAdapter = new CategoryAdapter(getContext(), categoryList, "category");
+        suggestAdapter = new SuggestAdapter(getContext(), suggestList, "suggestion");
+        exerciseAdapter = new ExerciseAdapter(exerciseList, getContext(), "exercise");
         searchView = view.findViewById(R.id.searchView);
 
         // Set up RecyclerViews
@@ -163,7 +163,8 @@ public class HomeFragment extends Fragment {
                         for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
                             String sname = document.getString("name");
                             String simageUrl = document.getString("imageUrl");
-                            String sid = document.getString("id"); // Assuming each document ID is the suggestion ID
+                            String sid = document.getString("id");
+                            // Assuming each document ID is the suggestion ID
                             exerciseList.add(new Suggest(sname, simageUrl, sid));
                         }
                         exerciseAdapter.notifyDataSetChanged();
@@ -276,7 +277,7 @@ public class HomeFragment extends Fragment {
                         for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
                             String sname = document.getString("name");
                             String simageUrl = document.getString("imageUrl");
-                            String sid = document.getId(); // Assuming each document ID is the suggestion ID
+                            String sid = document.getString("id"); // Assuming each document ID is the suggestion ID
                             exerciseList.add(new Suggest(sname, simageUrl, sid));
                         }
                         exerciseAdapter.notifyDataSetChanged();
@@ -287,24 +288,25 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadSuggestions() {
-        db.collection("homeworkout").
-                document ("suggestion").
-                collection ("workout").
-                get().addOnSuccessListener(queryDocumentSnapshots -> {
+        db.collection("homeworkout")
+                .document("suggestion")
+                .collection("workout")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
                         for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
                             String sname = document.getString("name");
                             String simageUrl = document.getString("imageUrl");
-                            String sid = document.getId(); // Assuming each document ID is the suggestion ID
-                            exerciseList.add(new Suggest(sname, simageUrl, sid));
+                            String sid = document.getString("id");
+                            suggestList.add(new Suggest(sname, simageUrl, sid));
                         }
-                        exerciseAdapter.notifyDataSetChanged();
+                        suggestAdapter.notifyDataSetChanged();
                     }
-                }).addOnFailureListener(e -> {
+                })
+                .addOnFailureListener(e -> {
                     // Handle failure
                 });
     }
-
     private void openCategoryFragment() {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment, new CategoryFragment()); // Replace 'CategoryFragment' with your actual fragment class name

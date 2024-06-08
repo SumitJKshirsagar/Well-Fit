@@ -22,10 +22,12 @@ public class SuggestAdapter extends RecyclerView.Adapter<SuggestAdapter.ViewHold
 
     private List<Suggest> suggestList;
     private Context context;
+    private String type;
 
-    public SuggestAdapter(Context context, List<Suggest> suggestList) {
+    public SuggestAdapter( Context context, List<Suggest> suggestList , String type ) {
         this.context = context;
         this.suggestList = suggestList;
+        this.type = type;
     }
 
     @NonNull
@@ -46,6 +48,7 @@ public class SuggestAdapter extends RecyclerView.Adapter<SuggestAdapter.ViewHold
             public void onClick(View v) {
                 Intent intent = new Intent(context, Phase1a.class);
                 intent.putExtra("category_id", category.getId()); // Pass category ID if needed
+                intent.putExtra("type", type);
                 context.startActivity(intent);
             }
         });

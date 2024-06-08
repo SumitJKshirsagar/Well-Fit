@@ -31,7 +31,7 @@ public class Phase2 extends AppCompatActivity {
     private int currentIndex = 0;
     private boolean showExerciseFragment = true;
     private String categoryId;
-    private String userId; // Variable to store user ID
+    private String userId, type; // Variable to store user ID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +44,10 @@ public class Phase2 extends AppCompatActivity {
 
         // Get the category ID and user ID from the intent
         categoryId = getIntent().getStringExtra("category_id");
-        userId = getIntent().getStringExtra("user_id"); // Assuming userId is passed via intent
+        userId = getIntent().getStringExtra("user_id");// Assuming userId is passed via intent
+        type = getIntent().getStringExtra("type");
 
-        if (categoryId != null && userId != null) {
+        if (categoryId != null && userId != null && type != null) {
             fetchUserLevel(); // Fetch user level firs
         } else {
             Toast.makeText(this, "Category ID or User ID not found", Toast.LENGTH_SHORT).show();
@@ -75,13 +76,13 @@ public class Phase2 extends AppCompatActivity {
     }
 
     private void fetchExercises(String userLevel) {
-        db.collection("homeworkout").document(categoryId)
-                .collection("workout").document("workout")
+        db.collection("homeworkout").document(type)
+                .collection("workout").document(categoryId)
                 .get().addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            exerciseIds = (List<String>) document.get("id");
+                            exerciseIds = (List<String>) document.get("ids");
                             fetchExerciseDetails(userLevel); // Pass user's level to fetchExerciseDetails
                         } else {
                             Toast.makeText(this, "No exercises found", Toast.LENGTH_SHORT).show();
