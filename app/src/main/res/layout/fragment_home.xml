@@ -265,21 +265,12 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_15sdp"
                     android:layout_weight="0.8"
-                    android:text="POPULAR EXERCISE"
+                    android:text="EXERCISES"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_15ssp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_15sdp"
-                    android:layout_weight="0.2"
-                    android:text="See all"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_15ssp"
-                    android:textStyle="bold" />
+
 
 
             </LinearLayout>

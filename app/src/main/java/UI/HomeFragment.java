@@ -21,10 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import Models.Category;
 import com.example.well_fit.R;
-import Models.Suggest;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
@@ -39,24 +36,27 @@ import java.util.Calendar;
 import java.util.List;
 
 import AboutUserUi.CategoryFragment;
+import Models.Category;
+import Models.Suggest;
 import adapters.CategoryAdapter;
+import adapters.ExerciseAdapter;
 import adapters.SuggestAdapter;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeFragment extends Fragment {
     private FrameLayout frameLayout;
     private FirebaseAuth mAuth;
-
     private CircleImageView img;
     private ImageView dp, drawer;
     private TextView username, time, see, user;
     private FirebaseFirestore db;
-    private RecyclerView categoryRecyclerView;
-    private RecyclerView suggestRecyclerView;
+    private RecyclerView categoryRecyclerView, suggestRecyclerView, exerciseRecyclerView;
     private CategoryAdapter categoryAdapter;
     private SuggestAdapter suggestAdapter;
+    private ExerciseAdapter exerciseAdapter;
     private List<Category> categoryList;
     private List<Suggest> suggestList;
+    private List<Suggest> exerciseList;
     private DrawerLayout drawerLayout;
     private Spinner spinner;
 
@@ -97,12 +97,13 @@ public class HomeFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         categoryRecyclerView = view.findViewById(R.id.category_rv);
         suggestRecyclerView = view.findViewById(R.id.suggest_rv);
+        exerciseRecyclerView = view.findViewById(R.id.exrecises_rv);
         categoryList = new ArrayList<>();
         suggestList = new ArrayList<>();
+        exerciseList = new ArrayList<>();
         categoryAdapter = new CategoryAdapter(getContext(), categoryList);
         suggestAdapter = new SuggestAdapter(getContext(), suggestList);
-
-
+        exerciseAdapter = new ExerciseAdapter(exerciseList, getContext());
 
         // Set up RecyclerViews
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -110,6 +111,9 @@ public class HomeFragment extends Fragment {
 
         suggestRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         suggestRecyclerView.setAdapter(suggestAdapter);
+
+        exerciseRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        exerciseRecyclerView.setAdapter(exerciseAdapter);
 
         // Set the OnClickListener for the see button
         see.setOnClickListener(new View.OnClickListener() {
@@ -129,8 +133,28 @@ public class HomeFragment extends Fragment {
         setTimeGreeting();
         loadCategories();
         loadSuggestions();
+        loadExercise();
         drawerLayoutToggle();
         levelSpinner(view);
+    }
+
+    private void loadExercise() {
+        db.collection("homeworkout").
+                document ("exercise").
+                collection ("workout").
+                get().addOnSuccessListener(queryDocumentSnapshots -> {
+            if (!queryDocumentSnapshots.isEmpty()) {
+                for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                    String sname = document.getString("name");
+                    String simageUrl = document.getString("imageUrl");
+                    String sid = document.getString("id"); // Assuming each document ID is the suggestion ID
+                    exerciseList.add(new Suggest(sname, simageUrl, sid));
+                }
+                exerciseAdapter.notifyDataSetChanged();
+            }
+        }).addOnFailureListener(e -> {
+            // Handle failure
+        });
     }
 
     private void levelSpinner(View view) {
@@ -178,7 +202,6 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
 
     private void drawerLayoutToggle() {
         drawer.setOnClickListener(view -> {
@@ -229,35 +252,41 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadCategories() {
-        db.collection("category").get().addOnSuccessListener(queryDocumentSnapshots -> {
-            if (!queryDocumentSnapshots.isEmpty()) {
-                for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                    String name = document.getString("name");
-                    String imageUrl = document.getString("imageUrl");
-                    String id = document.getId(); // Assuming each document ID is the category ID
-                    categoryList.add(new Category(name, imageUrl, id));
-                }
-                categoryAdapter.notifyDataSetChanged();
-            }
-        }).addOnFailureListener(e -> {
-            // Handle failure
-        });
+        db.collection("homeworkout").
+                document ("category").
+                collection ("workout").
+                get().addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                            String sname = document.getString("name");
+                            String simageUrl = document.getString("imageUrl");
+                            String sid = document.getId(); // Assuming each document ID is the suggestion ID
+                            exerciseList.add(new Suggest(sname, simageUrl, sid));
+                        }
+                        exerciseAdapter.notifyDataSetChanged();
+                    }
+                }).addOnFailureListener(e -> {
+                    // Handle failure
+                });
     }
 
     private void loadSuggestions() {
-        db.collection("homeworkout").get().addOnSuccessListener(queryDocumentSnapshots -> {
-            if (!queryDocumentSnapshots.isEmpty()) {
-                for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                    String sname = document.getString("name");
-                    String simageUrl = document.getString("imageUrl");
-                    String sid = document.getId(); // Assuming each document ID is the suggestion ID
-                    suggestList.add(new Suggest(sname, simageUrl, sid));
-                }
-                suggestAdapter.notifyDataSetChanged();
-            }
-        }).addOnFailureListener(e -> {
-            // Handle failure
-        });
+        db.collection("homeworkout").
+                document ("suggestion").
+                collection ("workout").
+                get().addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                            String sname = document.getString("name");
+                            String simageUrl = document.getString("imageUrl");
+                            String sid = document.getId(); // Assuming each document ID is the suggestion ID
+                            exerciseList.add(new Suggest(sname, simageUrl, sid));
+                        }
+                        exerciseAdapter.notifyDataSetChanged();
+                    }
+                }).addOnFailureListener(e -> {
+                    // Handle failure
+                });
     }
 
     private void openCategoryFragment() {
@@ -268,9 +297,9 @@ public class HomeFragment extends Fragment {
     }
 
     private void saveLevelToFirestore(DocumentReference userRef, String level) {
-        userRef.update("level", level).addOnCompleteListener(new OnCompleteListener <Void> () {
+        userRef.update("level", level).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onComplete(@NonNull Task <Void> task) {
+            public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     // Optionally show a message
                     // Toast.makeText(getActivity(), "Level updated", Toast.LENGTH_SHORT).show();
@@ -280,5 +309,4 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
 }
