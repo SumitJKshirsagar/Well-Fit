@@ -79,7 +79,7 @@ public class Phase1a extends AppCompatActivity {
         });
 
         if (categoryId != null) {
-            loadImageFromFirestore(categoryId);
+            loadImageFromFirestore(categoryId, type);
             loadUserLevelAndExercises(categoryId, type);
         } else {
             Log.e(TAG, "No category ID found in intent");
@@ -182,15 +182,17 @@ public class Phase1a extends AppCompatActivity {
 
 
 
-    private void loadImageFromFirestore(String categoryId) {
+    private void loadImageFromFirestore(String categoryId, String type) {
         db.collection("homeworkout")
-                .document(categoryId)
+                .document(type)
+                .collection ( "workout" )
+                .document (categoryId)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            String imageUrl = document.getString("imageUrl");
+                            String imageUrl = document.getString("image");
                             if (imageUrl != null && !imageUrl.isEmpty()) {
                                 Glide.with(Phase1a.this)
                                         .load(imageUrl)
