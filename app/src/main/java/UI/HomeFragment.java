@@ -278,9 +278,9 @@ public class HomeFragment extends Fragment {
                             String sname = document.getString("name");
                             String simageUrl = document.getString("imageUrl");
                             String sid = document.getString("id"); // Assuming each document ID is the suggestion ID
-                            exerciseList.add(new Suggest(sname, simageUrl, sid));
+                            categoryList.add(new Category(sname, simageUrl, sid));
                         }
-                        exerciseAdapter.notifyDataSetChanged();
+                        categoryAdapter.notifyDataSetChanged();
                     }
                 }).addOnFailureListener(e -> {
                     // Handle failure
