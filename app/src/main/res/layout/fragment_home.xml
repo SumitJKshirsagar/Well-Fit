@@ -162,16 +162,16 @@
             android:layout_height="match_parent">
 
 
-            <ImageView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/img"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/_5sdp"
                 android:src="@drawable/group_56529"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
 
             <TextView
                 android:id="@+id/txt"
@@ -181,6 +181,7 @@
                 android:text="Our suggestion"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15ssp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img" />
