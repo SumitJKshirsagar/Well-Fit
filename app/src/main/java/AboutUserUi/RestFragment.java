@@ -18,27 +18,39 @@ import com.example.well_fit.R;
 public class RestFragment extends Fragment {
     private TextView textViewTimer;
     private CountDownTimer countDownTimer;
-    private Button buttonNext;
+    private Button buttonNext, add;
+    private long timeLeftInMillis = 30000; // 30 seconds
 
     @Nullable
     @Override
-    public View onCreateView( @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rest, container, false);
         textViewTimer = view.findViewById(R.id.set);
         buttonNext = view.findViewById(R.id.next);
-        startTimer();
+        add = view.findViewById(R.id.add);
+        startTimer(timeLeftInMillis);
 
         buttonNext.setOnClickListener(v -> {
-            if (getActivity() instanceof Phase2 ) {
-                ((Phase2) getActivity()).displayNextFragment() ;
+            if (getActivity() instanceof Phase2) {
+                ((Phase2) getActivity()).displayNextFragment();
             }
         });
+
+        add.setOnClickListener(v -> {
+            timeLeftInMillis += 20000; // Add 20 seconds
+            startTimer(timeLeftInMillis); // Restart the timer with the new time
+        });
+
         return view;
     }
 
-    private void startTimer() {
-        countDownTimer = new CountDownTimer (20000, 1000) {
+    private void startTimer(long timeInMillis) {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+        countDownTimer = new CountDownTimer(timeInMillis, 1000) {
             public void onTick(long millisUntilFinished) {
+                timeLeftInMillis = millisUntilFinished;
                 textViewTimer.setText(String.valueOf(millisUntilFinished / 1000));
             }
 

@@ -34,6 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Chest Beginner"
+                android:id="@+id/exercise"
                 android:textColor="@color/grey"
                 android:layout_margin="@dimen/_15sdp"
                 android:textSize="@dimen/_15ssp"/>
@@ -69,6 +70,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
                         android:textSize="@dimen/_20sdp"
+                        android:id="@+id/total"
                         android:textAlignment="center"
                         android:text="11"
                         android:textColor="@color/white"/>
@@ -92,6 +94,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textSize="@dimen/_20sdp"
+                            android:id="@+id/calorie"
                             android:textAlignment="center"
                             android:text="3.1"
                             android:textColor="@color/white"/>
@@ -116,6 +119,7 @@
                             android:layout_weight="0.5"
                             android:textSize="@dimen/_20sdp"
                             android:textAlignment="center"
+                            android:id="@+id/time"
                             android:text="02:10"
                             android:textColor="@color/white"/>
                     </LinearLayout>

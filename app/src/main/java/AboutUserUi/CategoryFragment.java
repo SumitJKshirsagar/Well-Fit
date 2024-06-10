@@ -1,24 +1,30 @@
 package AboutUserUi;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.bumptech.glide.Glide;
 import com.example.well_fit.R;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import Models.Suggest;
+import UI.Phase1a;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CategoryFragment extends Fragment {
     private static final String TAG = "CategoryFragment";
     private FirebaseFirestore db;
+    String cat;
     CircleImageView strength, calisthenics, home, barbell, hiit, stretching;
 
     @Override
@@ -28,13 +34,16 @@ public class CategoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_category, container, false);
         strength = view.findViewById(R.id.c1);
         calisthenics = view.findViewById(R.id.c2);
-        home = view.findViewById(R.id.c4);
-        barbell = view.findViewById(R.id.c6);
         hiit = view.findViewById(R.id.c5);
         stretching = view.findViewById(R.id.c3);
 
         db = FirebaseFirestore.getInstance(); // Initialize Firestore
         loadImageFromFirestore();
+
+        cat = "Category";
+
+        // Set click listeners for each CircleImageView
+        setClickListeners();
 
         return view;
     }
@@ -48,8 +57,6 @@ public class CategoryFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 loadImage(document, "strength", strength);
                                 loadImage(document, "calisthenics", calisthenics);
-                                loadImage(document, "home", home);
-                                loadImage(document, "barbell", barbell);
                                 loadImage(document, "hiit", hiit);
                                 loadImage(document, "stretching", stretching);
                             }
@@ -80,5 +87,19 @@ public class CategoryFragment extends Fragment {
         } else {
             Log.w(TAG, "Field not found in document: " + fieldName);
         }
+    }
+
+    private void setClickListeners() {
+        strength.setOnClickListener(v -> onCategoryClicked("strength"));
+        calisthenics.setOnClickListener(v -> onCategoryClicked("calisthenics"));
+        hiit.setOnClickListener(v -> onCategoryClicked("hiit"));
+        stretching.setOnClickListener(v -> onCategoryClicked("stretching"));
+    }
+
+    private void onCategoryClicked(String category) {
+        Intent intent = new Intent ( getContext (), Phase1a.class );
+        intent.putExtra ( "category_id",  category );
+        intent.putExtra ( "type",  cat );
+        startActivity ( intent );
     }
 }

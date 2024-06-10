@@ -129,21 +129,6 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:id="@+id/c4"
-                android:layout_margin="5dp"
-                />
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/c4"
-                android:text="Home Workout"
-                android:gravity="center"
-                android:layout_margin="5dp"
-                android:textColor="@color/black"
-                android:textSize="18dp"/>
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
                 android:id="@+id/c5"
                 android:layout_toEndOf="@id/c4"
                 android:layout_margin="5dp"
@@ -155,23 +140,6 @@
                 android:text="HIIT"
                 android:gravity="center"
                 android:layout_toEndOf="@id/c4"
-                android:layout_margin="5dp"
-                android:textColor="@color/black"
-                android:textSize="18dp"/>
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:id="@+id/c6"
-                android:layout_toEndOf="@id/c5"
-                android:layout_margin="5dp"
-                />
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/c6"
-                android:text="Dumbell + Barbell"
-                android:gravity="center"
-                android:layout_toEndOf="@id/c5"
                 android:layout_margin="5dp"
                 android:textColor="@color/black"
                 android:textSize="18dp"/>

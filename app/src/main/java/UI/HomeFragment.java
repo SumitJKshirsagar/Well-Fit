@@ -3,13 +3,13 @@ package UI;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,10 +22,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.example.well_fit.R;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
@@ -46,7 +48,6 @@ import adapters.CategoryAdapter;
 import adapters.ExerciseAdapter;
 import adapters.ModeAdapter;
 import adapters.SuggestAdapter;
-import adapters.ModePagerAdapter;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeFragment extends Fragment {
@@ -56,21 +57,18 @@ public class HomeFragment extends Fragment {
     private ImageView dp, drawer;
     private TextView username, time, see, user;
     private FirebaseFirestore db;
-    private LinearLayout dot;
-    private ViewPager modeViewPager;
-    private ImageView[] dots;
     private RecyclerView categoryRecyclerView, suggestRecyclerView, exerciseRecyclerView, mode;
     private CategoryAdapter categoryAdapter;
     private SuggestAdapter suggestAdapter;
     private ExerciseAdapter exerciseAdapter;
     private ModeAdapter modeAdapter;
-    private ModePagerAdapter modePagerAdapter;
     private List<Category> categoryList;
     private List<Suggest> suggestList;
     private List<Suggest> exerciseList;
     private List<Suggest> modeList;
     private DrawerLayout drawerLayout;
     private Spinner spinner;
+    private GoogleSignInClient mGoogleSignInClient;
     private CardView searchView;
 
     public HomeFragment() {
@@ -111,9 +109,6 @@ public class HomeFragment extends Fragment {
         categoryRecyclerView = view.findViewById(R.id.category_rv);
         suggestRecyclerView = view.findViewById(R.id.suggest_rv);
         exerciseRecyclerView = view.findViewById(R.id.exrecises_rv);
-        modeViewPager = view.findViewById(R.id.view1);
-        modeList = new ArrayList<>();
-        dot = view.findViewById(R.id.dot);
         mode = view.findViewById(R.id.img);
         categoryList = new ArrayList<>();
         suggestList = new ArrayList<>();
@@ -125,6 +120,11 @@ public class HomeFragment extends Fragment {
         modeAdapter = new ModeAdapter(modeList, getContext(), "mode");
         searchView = view.findViewById(R.id.searchView);
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso);
         // Set up RecyclerViews
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         categoryRecyclerView.setAdapter(categoryAdapter);
@@ -137,11 +137,6 @@ public class HomeFragment extends Fragment {
 
         mode.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         mode.setAdapter(modeAdapter);
-
-        modePagerAdapter = new modeAdapter(modeList, getContext());
-        modeViewPager.setAdapter(modeAdapter);
-        modeViewPager.addOnPageChangeListener(viewListener);
-
         // Set the OnClickListener for the see button
         see.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,7 +148,7 @@ public class HomeFragment extends Fragment {
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openSearchActivity();
+                openSearchActivity ();
             }
         });
 
@@ -171,72 +166,79 @@ public class HomeFragment extends Fragment {
         loadExercise();
         drawerLayoutToggle();
         levelSpinner(view);
+
+        // Set up the navigation item selected listener
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener () {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.plans) {
+                    Toast.makeText(getContext(), "Plans selected", Toast.LENGTH_SHORT).show();
+                } else if (id == R.id.training) {
+                    Toast.makeText(getContext(), "Training selected", Toast.LENGTH_SHORT).show();
+                } else if (id == R.id.category) {
+                    openCategoryFragment();
+                } else if (id == R.id.myaccount) {
+                    openProfileFragment();
+                } else if (id == R.id.Myfev) {
+                    Toast.makeText(getContext(), "My Favorites selected", Toast.LENGTH_SHORT).show();
+                } else if (id == R.id.AppSettings) {
+                    openSettingFragment();
+                } else if (id == R.id.ContactSupport) {
+                    openSupportFragment();
+                } else if (id == R.id.SignOut) {
+                    signOut();
+                } else {
+                }
+                drawerLayout.closeDrawers(); // Close the navigation drawer after an item is selected
+                return true;
+            }
+        });
     }
 
-    private void loadMode() {
-        db.collection("homeworkout")
-                .document("mode")
-                .collection("workout")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                            String sname = document.getString("name");
-                            String simageUrl = document.getString("imageUrl");
-                            String sid = document.getString("id");
-                            modeList.add(new Suggest(sname, simageUrl, sid));
+    private void loadMode ( ) {
+        db.collection ( "homeworkout" ).
+                document ( "mode" ).
+                collection ( "workout" ).
+                get ( ).addOnSuccessListener ( queryDocumentSnapshots -> {
+                    if ( ! queryDocumentSnapshots.isEmpty ( ) ) {
+                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments ( )) {
+                            String sname = document.getString ( "name" );
+                            String simageUrl = document.getString ( "imageUrl" );
+                            String sid = document.getString ( "id" );
+                            // Assuming each document ID is the suggestion ID
+                            modeList.add ( new Suggest ( sname , simageUrl , sid ) );
                         }
-                        modePagerAdapter.notifyDataSetChanged();
+                        modeAdapter.notifyDataSetChanged ( );
                     }
-                })
-                .addOnFailureListener(e -> {
+                } ).addOnFailureListener ( e -> {
                     // Handle failure
-                });
-    }
-
-    private void addDotsIndicator(int position) {
-        dots = new ImageView[modePagerAdapter.getCount()];
-        dot.removeAllViews();
-
-        for (int i = 0; i < dots.length; i++) {
-            dots[i] = new ImageView(getContext());
-            dots[i].setImageResource(R.drawable.dot); // use your inactive dot drawable
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(8, 0, 8, 0);
-            dot.addView(dots[i], params);
-        }
-
-        if (dots.length > 0) {
-            dots[position].setImageResource(R.drawable.dot_active); // use your active dot drawable
-        }
+                } );
     }
 
     private void openSearchActivity() {
-        Intent intent = new Intent(requireContext(), SearchActivity.class);
-        startActivity(intent);
+        Intent intent = new Intent ( requireContext(), SearchActivity.class );
+        startActivity ( intent );
     }
 
     private void loadExercise() {
-        db.collection("homeworkout")
-                .document("exercise")
-                .collection("workout")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                            String sname = document.getString("name");
-                            String simageUrl = document.getString("imageUrl");
-                            String sid = document.getString("id");
-                            exerciseList.add(new Suggest(sname, simageUrl, sid));
+        db.collection ( "homeworkout" ).
+                document ( "exercise" ).
+                collection ( "workout" ).
+                get ( ).addOnSuccessListener ( queryDocumentSnapshots -> {
+                    if ( ! queryDocumentSnapshots.isEmpty ( ) ) {
+                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments ( )) {
+                            String sname = document.getString ( "name" );
+                            String simageUrl = document.getString ( "imageUrl" );
+                            String sid = document.getString ( "id" );
+                            // Assuming each document ID is the suggestion ID
+                            exerciseList.add ( new Suggest ( sname , simageUrl , sid ) );
                         }
-                        exerciseAdapter.notifyDataSetChanged();
+                        exerciseAdapter.notifyDataSetChanged ( );
                     }
-                })
-                .addOnFailureListener(e -> {
+                } ).addOnFailureListener ( e -> {
                     // Handle failure
-                });
+                } );
     }
 
     private void levelSpinner(View view) {
@@ -247,6 +249,7 @@ public class HomeFragment extends Fragment {
         adapter.setDropDownViewResource(R.layout.style_spinner);
         spinner.setAdapter(adapter);
 
+        // Fetch and set the user's current level
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             DocumentReference userRef = db.collection("users").document(currentUser.getUid());
@@ -260,7 +263,7 @@ public class HomeFragment extends Fragment {
                             spinner.setSelection(spinnerPosition);
                         }
                     } else {
-                        // Handle error
+                        Toast.makeText(getActivity(), "Failed to fetch user level", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -268,101 +271,85 @@ public class HomeFragment extends Fragment {
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedLevel = parent.getItemAtPosition(position).toString();
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String selectedLevel = parentView.getItemAtPosition(position).toString();
+                FirebaseUser currentUser = mAuth.getCurrentUser();
                 if (currentUser != null) {
                     DocumentReference userRef = db.collection("users").document(currentUser.getUid());
-                    userRef.update("level", selectedLevel)
-                            .addOnSuccessListener(aVoid -> Toast.makeText(requireContext(), "Level updated to " + selectedLevel, Toast.LENGTH_SHORT).show())
-                            .addOnFailureListener(e -> Toast.makeText(requireContext(), "Failed to update level", Toast.LENGTH_SHORT).show());
+                    saveLevelToFirestore(userRef, selectedLevel);
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing
+
             }
         });
     }
 
     private void drawerLayoutToggle() {
-        NavigationView navigationView = getView().findViewById(R.id.navigationView);
-        drawer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (drawerLayout.isDrawerOpen(navigationView)) {
-                    drawerLayout.closeDrawer(navigationView);
-                } else {
-                    drawerLayout.openDrawer(navigationView);
-                }
-            }
+        drawer.setOnClickListener(view -> {
+            drawerLayout.open();
         });
+
     }
 
     private void loadUserData() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            String userId = currentUser.getUid();
-            DocumentReference userRef = db.collection("users").document(userId);
-            userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            String name = document.getString("name");
-                            String imageUrl = document.getString("imageUrl");
-                            username.setText(name);
-                            user.setText(name);
-                            Glide.with(requireContext()).load(imageUrl).into(dp);
-                            Glide.with(requireContext()).load(imageUrl).into(img);
-                        }
-                    }
+            String userEmail = currentUser.getEmail();
+            // Fetch additional data from Firestore
+            db.collection("users").whereEqualTo("email", userEmail).get().addOnSuccessListener(queryDocumentSnapshots -> {
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    // There should be only one document corresponding to the user's email
+                    DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                    // Update UI elements with fetched data
+                    String userName = documentSnapshot.getString("name");
+                    String userImageUrl = documentSnapshot.getString("photoUrl");
+                    username.setText(userName + "!");
+                    user.setText(userName);
+                    Glide.with(HomeFragment.this).load(userImageUrl).into(dp);
+                    Glide.with(HomeFragment.this).load(userImageUrl).into(img);
                 }
+            }).addOnFailureListener(e -> {
+                // Handle failure
             });
         }
     }
 
     private void setTimeGreeting() {
         Calendar calendar = Calendar.getInstance();
-        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+        int timeOfDay = calendar.get(Calendar.HOUR_OF_DAY);
 
-        if (hourOfDay >= 0 && hourOfDay < 12) {
-            time.setText("Good morning");
-        } else if (hourOfDay >= 12 && hourOfDay < 16) {
-            time.setText("Good afternoon");
-        } else if (hourOfDay >= 16 && hourOfDay < 21) {
-            time.setText("Good evening");
-        } else if (hourOfDay >= 21 && hourOfDay < 24) {
-            time.setText("Good night");
+        String greetingMessage;
+        if (timeOfDay >= 0 && timeOfDay < 12) {
+            greetingMessage = "Hello, Good Morning";
+        } else if (timeOfDay >= 12 && timeOfDay < 16) {
+            greetingMessage = "Hello, Good Afternoon";
+        } else if (timeOfDay >= 16 && timeOfDay < 21) {
+            greetingMessage = "Hello, Good Evening";
+        } else {
+            greetingMessage = "Hello, Good Night";
         }
-    }
 
-    private void openCategoryFragment() {
-        CategoryFragment categoryFragment = new CategoryFragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment, categoryFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        time.setText(greetingMessage);
     }
 
     private void loadCategories() {
-        db.collection("homeworkout")
-                .document("category")
-                .collection("workout")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
+        db.collection("homeworkout").
+                document ("category").
+                collection ("workout").
+                get().addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
                         for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                            String name = document.getString("name");
-                            String imageUrl = document.getString("imageUrl");
-                            String id = document.getString("id");
-                            categoryList.add(new Category(name, imageUrl, id));
+                            String sname = document.getString("name");
+                            String simageUrl = document.getString("imageUrl");
+                            String sid = document.getString("id"); // Assuming each document ID is the suggestion ID
+                            categoryList.add(new Category(sname, simageUrl, sid));
                         }
                         categoryAdapter.notifyDataSetChanged();
                     }
-                })
-                .addOnFailureListener(e -> {
+                }).addOnFailureListener(e -> {
                     // Handle failure
                 });
     }
@@ -387,19 +374,57 @@ public class HomeFragment extends Fragment {
                     // Handle failure
                 });
     }
+    private void openCategoryFragment() {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment, new CategoryFragment()); // Replace 'CategoryFragment' with your actual fragment class name
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+    private void openSettingFragment() {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment, new SettingFragment()); // Replace 'CategoryFragment' with your actual fragment class name
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 
-    private ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        }
+    private void openSupportFragment() {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment, new SupportFragment()); // Replace 'CategoryFragment' with your actual fragment class name
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 
-        @Override
-        public void onPageSelected(int position) {
-            addDotsIndicator(position);
-        }
+    private void openProfileFragment() {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment, new ProfileFragment()); // Replace 'CategoryFragment' with your actual fragment class name
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 
-        @Override
-        public void onPageScrollStateChanged(int state) {
-        }
-    };
+    private void saveLevelToFirestore(DocumentReference userRef, String level) {
+        userRef.update("level", level).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    // Optionally show a message
+                    // Toast.makeText(getActivity(), "Level updated", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Failed to update level", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void signOut() {
+        mAuth.signOut();
+        mGoogleSignInClient.signOut().addOnCompleteListener(requireActivity(), new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                // User is now signed out
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
+    }
 }

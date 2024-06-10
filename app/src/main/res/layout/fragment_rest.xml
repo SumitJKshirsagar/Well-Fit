@@ -106,6 +106,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="+20s"
+                android:id="@+id/add"
                 android:backgroundTint="#66E8F892"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_15ssp"
@@ -127,6 +128,7 @@
                 android:textStyle="bold"
                 android:id="@+id/next"
                 android:gravity="center"
+                android:layout_marginBottom="@dimen/_65sdp"
                 android:layout_marginLeft="@dimen/_50sdp"
                 android:layout_marginRight="@dimen/_50sdp"
                 android:background="@drawable/loginbtn"/>
