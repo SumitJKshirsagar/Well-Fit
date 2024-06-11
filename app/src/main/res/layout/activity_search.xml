@@ -7,39 +7,31 @@
     android:layout_height="match_parent"
     tools:context="UI.SearchActivity">
 
-  <androidx.cardview.widget.CardView
-      android:id="@+id/search_View"
-      android:layout_width="match_parent"
-      android:layout_margin="@dimen/_10sdp"
-      android:layout_height="wrap_content"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:cardCornerRadius="@dimen/_10sdp"
-     >
 
-      <EditText
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="@dimen/_2sdp"
-          android:drawableStart="@drawable/search_24dp_fill0_wght400_grad0_opsz24"
+
+      <SearchView
+          android:id="@+id/search_View"
+          android:layout_width="0dp"
+          android:layout_height="@dimen/_45sdp"
+          android:layout_margin="@dimen/_5sdp"
+          android:queryBackground="@android:color/transparent"
+          android:queryHint="Search here..."
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
           android:background="@drawable/divider_bg"
-          android:drawableTint="@color/black"
-          android:drawablePadding="@dimen/_5sdp"
-          android:hint="Search"
-          android:textColor="@color/grey"
-          android:textColorHint="@color/grey"
           android:textSize="@dimen/_15sdp"
-          android:padding="@dimen/_15sdp"/>
+         />
 
 
-  </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_item_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/search_View"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="@dimen/_10sdp"
         app:layout_constraintEnd_toEndOf="parent"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

@@ -162,16 +162,26 @@
             android:layout_height="match_parent">
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/img"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="@dimen/_5sdp"
-                android:src="@drawable/group_56529"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+
+                <com.codebyashish.autoimageslider.AutoImageSlider
+                    android:id="@+id/autoImageSlider"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_margin="10dp"
+                    app:ais_auto_sliding="true"
+                    app:ais_corner_radius="10"
+                    app:ais_indicator_align="@string/center"
+                    app:ais_dots_visible="true"
+                    app:ais_indicator_style="@string/style_dot"
+                    app:ais_selected_indicator="@drawable/dot_active"
+                    app:ais_unselected_indicator="@drawable/dot"
+                    app:ais_placeholder="@drawable/placeholder_default_loading"
+                    app:ais_time_interval="3000"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/txt"
+                    />
 
             <TextView
                 android:id="@+id/txt"
@@ -184,7 +194,8 @@
                 android:layout_marginTop="@dimen/_5sdp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img" />
+                app:layout_constraintBottom_toTopOf="@+id/suggest_rv"
+               />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/suggest_rv"
