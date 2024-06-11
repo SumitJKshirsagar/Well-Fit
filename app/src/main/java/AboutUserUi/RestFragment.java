@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Button;
+import android.widget.Toast;
+
 import UI.Phase2;
 import com.bumptech.glide.Glide;
 import com.example.well_fit.R;
@@ -60,6 +62,12 @@ public class RestFragment extends Fragment {
                         .load(imageUrl)
                         .into(img);
             }
+            else{
+                Toast.makeText(getContext(), "img not found", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else{
+            Toast.makeText(getContext(), "no data", Toast.LENGTH_SHORT).show();
         }
 
         return view;

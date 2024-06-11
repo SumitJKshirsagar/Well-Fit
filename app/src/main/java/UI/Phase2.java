@@ -31,7 +31,7 @@ public class Phase2 extends AppCompatActivity {
     private int currentIndex = 0;
     private boolean showExerciseFragment = true;
     private String categoryId;
-    private String userId, type; // Variable to store user ID
+    private String userId, type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,54 +44,51 @@ public class Phase2 extends AppCompatActivity {
 
         // Get the category ID and user ID from the intent
         categoryId = getIntent().getStringExtra("category_id");
-        userId = getIntent().getStringExtra("user_id");// Assuming userId is passed via intent
+        userId = getIntent().getStringExtra("user_id");
         type = getIntent().getStringExtra("type");
 
         if (categoryId != null && userId != null && type != null) {
-            fetchUserLevel(); // Fetch user level firs
+            fetchUserLevel();
         } else {
-            Toast.makeText(this, "Category ID or User ID not found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Category ID, User ID, or Type not found", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void fetchUserLevel() {
-        db.collection("users").document(userId)
-                .get().addOnCompleteListener(userTask -> {
-                    if (userTask.isSuccessful()) {
-                        DocumentSnapshot userDocument = userTask.getResult();
-                        if (userDocument.exists()) {
-                            String userLevel = userDocument.getString("level");
-                            if (userLevel != null) {
-                                fetchExercises(userLevel);
-                            } else {
-                                Toast.makeText(this, "User level not found", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(this, "User document not found", Toast.LENGTH_SHORT).show();
-                        }
+        db.collection("users").document(userId).get().addOnCompleteListener(userTask -> {
+            if (userTask.isSuccessful()) {
+                DocumentSnapshot userDocument = userTask.getResult();
+                if (userDocument.exists()) {
+                    String userLevel = userDocument.getString("level");
+                    if (userLevel != null) {
+                        fetchExercises(userLevel);
                     } else {
-                        Toast.makeText(this, "Failed to fetch user document", Toast.LENGTH_SHORT).show();
+                        showToast("User level not found");
                     }
-                });
+                } else {
+                    showToast("User document not found");
+                }
+            } else {
+                showToast("Failed to fetch user document");
+            }
+        });
     }
 
     private void fetchExercises(String userLevel) {
         db.collection("homeworkout").document(type)
-                .collection("workout").document(categoryId)
-                .get().addOnCompleteListener(task -> {
+                .collection("workout").document(categoryId).get().addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             String calorie = document.getString("calorie");
                             String time = document.getString("time");
-                            String total = document.getString("total");
                             exerciseIds = (List<String>) document.get("ids");
-                            fetchExerciseDetails(userLevel, calorie, time); // Pass user's level to fetchExerciseDetails
+                            fetchExerciseDetails(userLevel, calorie, time);
                         } else {
-                            Toast.makeText(this, "No exercises found", Toast.LENGTH_SHORT).show();
+                            showToast("No exercises found");
                         }
                     } else {
-                        Toast.makeText(this, "Failed to fetch exercises", Toast.LENGTH_SHORT).show();
+                        showToast("Failed to fetch exercises");
                     }
                 });
     }
@@ -102,10 +99,8 @@ public class Phase2 extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot exerciseDocument = task.getResult();
                     if (exerciseDocument.exists()) {
-                        // Check if the exercise document has a subcollection "Level" instead of "levels"
                         db.collection("Exercise").document(id)
-                                .collection("Level").document(userLevel).get()
-                                .addOnCompleteListener(levelTask -> {
+                                .collection("Level").document(userLevel).get().addOnCompleteListener(levelTask -> {
                                     if (levelTask.isSuccessful()) {
                                         DocumentSnapshot levelDocument = levelTask.getResult();
                                         if (levelDocument.exists()) {
@@ -120,55 +115,80 @@ public class Phase2 extends AppCompatActivity {
                                                 details.put("imageUrl", imageUrl);
                                                 details.put("calorie", calorie);
                                                 details.put("time", time);
-                                                details.put("total", String.valueOf ( exercises.size () ) );
                                                 exercises.add(details);
 
                                                 if (exercises.size() == exerciseIds.size()) {
-
                                                     displayNextFragment();
                                                 }
                                             } else {
-                                                Toast.makeText(this, "One of the required fields is null for exercise ID: " + id, Toast.LENGTH_SHORT).show();
-                                                Log.e(TAG, "One of the required fields is null for exercise ID: " + id);
+                                                logError("One of the required fields is null for exercise ID: " + id);
                                             }
                                         } else {
-                                            Toast.makeText(this, "Exercise details not found for level: " + userLevel + " and ID: " + id, Toast.LENGTH_SHORT).show();
+                                            showToast("Exercise details not found for level: " + userLevel + " and ID: " + id);
                                         }
                                     } else {
-                                        Toast.makeText(this, "Failed to fetch exercise details for level: " + userLevel + " and ID: " + id, Toast.LENGTH_SHORT).show();
+                                        showToast("Failed to fetch exercise details for level: " + userLevel + " and ID: " + id);
                                     }
                                 });
                     } else {
-                        Toast.makeText(this, "Exercise details not found for ID: " + id, Toast.LENGTH_SHORT).show();
+                        showToast("Exercise details not found for ID: " + id);
                     }
                 } else {
-                    Toast.makeText(this, "Failed to fetch exercise details for ID: " + id, Toast.LENGTH_SHORT).show();
+                    showToast("Failed to fetch exercise details for ID: " + id);
                 }
             });
         }
     }
 
     public void displayNextFragment() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment fragment;
+        runOnUiThread(() -> {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            Fragment fragment;
 
-        if (currentIndex >= exercises.size()) {
-            fragment = new EndFragment(); // Display EndFragment when all exercises are done
-        } else if (showExerciseFragment) {
-            fragment = new ExerciseFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("name", exercises.get(currentIndex).get("name"));
-            bundle.putString("reps", exercises.get(currentIndex).get("reps"));
-            bundle.putString("imageUrl", exercises.get(currentIndex).get("imageUrl"));
-            fragment.setArguments(bundle);
+            if (currentIndex >= exercises.size()) {
+                fragment = new EndFragment();
+                Bundle bundle = createBundle(currentIndex - 1);
+                fragment.setArguments(bundle);
+            } else if (showExerciseFragment) {
+                fragment = new ExerciseFragment();
+                Bundle bundle = createBundle(currentIndex);
+                fragment.setArguments(bundle);
+            } else {
+                fragment = new RestFragment();
+                Bundle bundle = createBundle(currentIndex);
+                fragment.setArguments(bundle);
+            }
+
             currentIndex++;
-        } else {
-            fragment = new RestFragment();
-        }
+            showExerciseFragment = !showExerciseFragment;
+            fragmentTransaction.replace(R.id.fragment, fragment);
+            fragmentTransaction.commit();
+        });
+    }
 
-        showExerciseFragment = !showExerciseFragment;
-        fragmentTransaction.replace(R.id.fragment, fragment);
-        fragmentTransaction.commit();
+    private Bundle createBundle(int index) {
+        Bundle bundle = new Bundle();
+        if (index >= 0 && index < exercises.size()) {
+            Map<String, String> exerciseDetails = exercises.get(index);
+            bundle.putString("name", exerciseDetails.get("name"));
+            bundle.putString("reps", exerciseDetails.get("reps"));
+            bundle.putString("imageUrl", exerciseDetails.get("imageUrl"));
+            bundle.putString("calorie", exerciseDetails.get("calorie"));
+            bundle.putString("time", exerciseDetails.get("time"));
+            bundle.putString("category_id", categoryId);
+        }
+        return bundle;
+    }
+
+    private void showToast(String message) {
+        runOnUiThread(() -> Toast.makeText(Phase2.this, message, Toast.LENGTH_SHORT).show());
+    }
+
+    private void logError(String message) {
+        runOnUiThread(() -> {
+            Log.e(TAG, message);
+            Toast.makeText(Phase2.this, message, Toast.LENGTH_SHORT).show();
+        });
     }
 }

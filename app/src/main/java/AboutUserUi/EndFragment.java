@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import Models.Category;
 import UI.MainActivity;
@@ -40,14 +41,15 @@ public class EndFragment extends Fragment {
             }
         } );
         if (getArguments() != null) {
-            String name = getArguments().getString("name");
-            String total = getArguments().getString("total");
+            String name = getArguments().getString("category_id");
             String time = getArguments().getString("time");
             String calorie = getArguments().getString("calorie");
             exercise.setText(name);
-            totalexe.setText(total);
             this.timeexe.setText(time);
             this.calorieexe.setText(calorie);
+        }
+        else{
+            Toast.makeText(getContext(), "No Data", Toast.LENGTH_SHORT).show();
         }
 
         return view;
