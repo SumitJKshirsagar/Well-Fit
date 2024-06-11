@@ -82,8 +82,11 @@ public class Phase2 extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
+                            String calorie = document.getString("calorie");
+                            String time = document.getString("time");
+                            String total = document.getString("total");
                             exerciseIds = (List<String>) document.get("ids");
-                            fetchExerciseDetails(userLevel); // Pass user's level to fetchExerciseDetails
+                            fetchExerciseDetails(userLevel, calorie, time); // Pass user's level to fetchExerciseDetails
                         } else {
                             Toast.makeText(this, "No exercises found", Toast.LENGTH_SHORT).show();
                         }
@@ -93,7 +96,7 @@ public class Phase2 extends AppCompatActivity {
                 });
     }
 
-    private void fetchExerciseDetails(String userLevel) {
+    private void fetchExerciseDetails(String userLevel, String calorie, String time) {
         for (String id : exerciseIds) {
             db.collection("Exercise").document(id).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -115,9 +118,13 @@ public class Phase2 extends AppCompatActivity {
                                                 details.put("name", name);
                                                 details.put("reps", reps);
                                                 details.put("imageUrl", imageUrl);
+                                                details.put("calorie", calorie);
+                                                details.put("time", time);
+                                                details.put("total", String.valueOf ( exercises.size () ) );
                                                 exercises.add(details);
 
                                                 if (exercises.size() == exerciseIds.size()) {
+
                                                     displayNextFragment();
                                                 }
                                             } else {
