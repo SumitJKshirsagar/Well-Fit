@@ -82,8 +82,9 @@ public class Phase2 extends AppCompatActivity {
                         if (document.exists()) {
                             String calorie = document.getString("calorie");
                             String time = document.getString("time");
+                            String rest = document.getString("rest");
                             exerciseIds = (List<String>) document.get("ids");
-                            fetchExerciseDetails(userLevel, calorie, time);
+                            fetchExerciseDetails(userLevel, calorie, time, rest);
                         } else {
                             showToast("No exercises found");
                         }
@@ -93,7 +94,7 @@ public class Phase2 extends AppCompatActivity {
                 });
     }
 
-    private void fetchExerciseDetails(String userLevel, String calorie, String time) {
+    private void fetchExerciseDetails(String userLevel, String calorie, String time, String rest) {
         for (String id : exerciseIds) {
             db.collection("Exercise").document(id).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -115,6 +116,7 @@ public class Phase2 extends AppCompatActivity {
                                                 details.put("imageUrl", imageUrl);
                                                 details.put("calorie", calorie);
                                                 details.put("time", time);
+                                                details.put("rest", rest);
                                                 exercises.add(details);
 
                                                 if (exercises.size() == exerciseIds.size()) {
@@ -177,6 +179,7 @@ public class Phase2 extends AppCompatActivity {
             bundle.putString("calorie", exerciseDetails.get("calorie"));
             bundle.putString("time", exerciseDetails.get("time"));
             bundle.putString("category_id", categoryId);
+            bundle.putString("rest", exerciseDetails.get("rest"));
         }
         return bundle;
     }
