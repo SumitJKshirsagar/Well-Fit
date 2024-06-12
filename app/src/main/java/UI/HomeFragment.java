@@ -24,6 +24,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.codebyashish.autoimageslider.AutoImageSlider;
+import com.codebyashish.autoimageslider.Enums.ImageActionTypes;
+import com.codebyashish.autoimageslider.Enums.ImageScaleType;
+import com.codebyashish.autoimageslider.Interfaces.ItemsListener;
+import com.codebyashish.autoimageslider.Models.ImageSlidesModel;
 import com.example.well_fit.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -46,7 +51,6 @@ import Models.Category;
 import Models.Suggest;
 import adapters.CategoryAdapter;
 import adapters.ExerciseAdapter;
-import adapters.ModeAdapter;
 import adapters.SuggestAdapter;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -57,19 +61,19 @@ public class HomeFragment extends Fragment {
     private ImageView dp, drawer;
     private TextView username, time, see, user;
     private FirebaseFirestore db;
-    private RecyclerView categoryRecyclerView, suggestRecyclerView, exerciseRecyclerView, mode;
+    private RecyclerView categoryRecyclerView, suggestRecyclerView, exerciseRecyclerView;
     private CategoryAdapter categoryAdapter;
     private SuggestAdapter suggestAdapter;
     private ExerciseAdapter exerciseAdapter;
-    private ModeAdapter modeAdapter;
     private List<Category> categoryList;
     private List<Suggest> suggestList;
     private List<Suggest> exerciseList;
-    private List<Suggest> modeList;
+    private List<Suggest> autoImageList;
     private DrawerLayout drawerLayout;
     private Spinner spinner;
     private GoogleSignInClient mGoogleSignInClient;
     private CardView searchView;
+    private AutoImageSlider autoImageSlider;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -97,6 +101,8 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+
         frameLayout = view.findViewById(R.id.fragment);
         username = view.findViewById(R.id.username);
         time = view.findViewById(R.id.greetings_txt);
@@ -109,16 +115,45 @@ public class HomeFragment extends Fragment {
         categoryRecyclerView = view.findViewById(R.id.category_rv);
         suggestRecyclerView = view.findViewById(R.id.suggest_rv);
         exerciseRecyclerView = view.findViewById(R.id.exrecises_rv);
-        mode = view.findViewById(R.id.img);
+        autoImageSlider = view.findViewById(R.id.autoImageSlider);
         categoryList = new ArrayList<>();
         suggestList = new ArrayList<>();
         exerciseList = new ArrayList<>();
-        modeList = new ArrayList<>();
+        autoImageList = new ArrayList<>();
         categoryAdapter = new CategoryAdapter(getContext(), categoryList, "category");
         suggestAdapter = new SuggestAdapter(getContext(), suggestList, "suggestion");
         exerciseAdapter = new ExerciseAdapter(exerciseList, getContext(), "exercise");
-        modeAdapter = new ModeAdapter(modeList, getContext(), "mode");
         searchView = view.findViewById(R.id.searchView);
+
+
+
+
+
+        // set any default animation or custom animation (setSlideAnimation(ImageAnimationTypes.ZOOM_IN))
+        autoImageSlider.setDefaultAnimation();
+
+        // handle click event on item click
+        autoImageSlider.onItemClickListener(new ItemsListener() {
+            @Override
+            public void onItemChanged(int i) {
+
+            }
+
+            @Override
+            public void onTouched(@Nullable ImageActionTypes imageActionTypes, int i) {
+
+            }
+
+            @Override
+            public void onItemClicked(int i) {
+
+            }
+        });
+
+
+
+
+
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -135,8 +170,7 @@ public class HomeFragment extends Fragment {
         exerciseRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         exerciseRecyclerView.setAdapter(exerciseAdapter);
 
-        mode.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        mode.setAdapter(modeAdapter);
+
         // Set the OnClickListener for the see button
         see.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,15 +191,7 @@ public class HomeFragment extends Fragment {
         user = headerView.findViewById(R.id.user);
         img = headerView.findViewById(R.id.profile_img);
 
-        // Load user's data and set time
-        loadUserData();
-        setTimeGreeting();
-        loadMode();
-        loadCategories();
-        loadSuggestions();
-        loadExercise();
-        drawerLayoutToggle();
-        levelSpinner(view);
+
 
         // Set up the navigation item selected listener
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener () {
@@ -194,27 +220,44 @@ public class HomeFragment extends Fragment {
                 return true;
             }
         });
+
+
+        // Load user's data and set time
+        loadUserData();
+        setTimeGreeting();
+        loadMode();
+        loadCategories();
+        loadSuggestions();
+        loadExercise();
+        drawerLayoutToggle();
+        levelSpinner(view);
     }
 
-    private void loadMode ( ) {
-        db.collection ( "homeworkout" ).
-                document ( "mode" ).
-                collection ( "workout" ).
-                get ( ).addOnSuccessListener ( queryDocumentSnapshots -> {
-                    if ( ! queryDocumentSnapshots.isEmpty ( ) ) {
-                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments ( )) {
-                            String sname = document.getString ( "name" );
-                            String simageUrl = document.getString ( "imageUrl" );
-                            String sid = document.getString ( "id" );
+    private void loadMode() {
+        db.collection("homeworkout")
+                .document("mode")
+                .collection("workout")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        List<ImageSlidesModel> slideModels = new ArrayList<>();
+                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                            String sname = document.getString("name");
+                            String simageUrl = document.getString("imageUrl");
+                            String sid = document.getString("id");
+                            slideModels.add(new ImageSlidesModel(simageUrl, sname,ImageScaleType.CENTER_INSIDE));
                             // Assuming each document ID is the suggestion ID
-                            modeList.add ( new Suggest ( sname , simageUrl , sid ) );
+                            autoImageList.add(new Suggest(sname, simageUrl, sid));
                         }
-                        modeAdapter.notifyDataSetChanged ( );
+                        // Set the slideModels to the adapter of the AutoImageSlider
+                        autoImageSlider.setImageList((ArrayList<ImageSlidesModel>) slideModels, ImageScaleType.CENTER_INSIDE);
                     }
-                } ).addOnFailureListener ( e -> {
+                })
+                .addOnFailureListener(e -> {
                     // Handle failure
-                } );
+                });
     }
+
 
     private void openSearchActivity() {
         Intent intent = new Intent ( requireContext(), SearchActivity.class );
@@ -314,6 +357,9 @@ public class HomeFragment extends Fragment {
             }).addOnFailureListener(e -> {
                 // Handle failure
             });
+        }
+        else {
+            Toast.makeText(requireContext(),"connection error",Toast.LENGTH_SHORT);
         }
     }
 
