@@ -146,11 +146,11 @@ public class Phase2 extends AppCompatActivity {
         runOnUiThread(() -> {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            Fragment fragment;
+            Fragment fragment = null;
 
             if (currentIndex >= exercises.size()) {
                 fragment = new EndFragment();
-                Bundle bundle = createBundle(currentIndex - 1);
+                Bundle bundle = createEndBundle(currentIndex - 1); // Use the last exercise details
                 fragment.setArguments(bundle);
             } else if (showExerciseFragment) {
                 fragment = new ExerciseFragment();
@@ -158,14 +158,19 @@ public class Phase2 extends AppCompatActivity {
                 fragment.setArguments(bundle);
             } else {
                 fragment = new RestFragment();
-                Bundle bundle = createBundle(currentIndex);
+                Bundle bundle = createBundle(currentIndex); // Set current exercise in rest fragment
                 fragment.setArguments(bundle);
             }
 
-            currentIndex++;
+            if (fragment != null) {
+                fragmentTransaction.replace(R.id.fragment, fragment);
+                fragmentTransaction.commit();
+            }
+
+            if (showExerciseFragment || currentIndex >= exercises.size()) {
+                currentIndex++;
+            }
             showExerciseFragment = !showExerciseFragment;
-            fragmentTransaction.replace(R.id.fragment, fragment);
-            fragmentTransaction.commit();
         });
     }
 
@@ -180,6 +185,19 @@ public class Phase2 extends AppCompatActivity {
             bundle.putString("time", exerciseDetails.get("time"));
             bundle.putString("category_id", categoryId);
             bundle.putString("rest", exerciseDetails.get("rest"));
+        }
+        return bundle;
+    }
+
+    private Bundle createEndBundle(int index) {
+        Bundle bundle = new Bundle();
+        if (index >= 0 && index < exercises.size()) {
+            Map<String, String> exerciseDetails = exercises.get(index);
+            bundle.putString("name", exerciseDetails.get("name"));
+            bundle.putString("reps", exerciseDetails.get("reps"));
+            bundle.putString("imageUrl", exerciseDetails.get("imageUrl"));
+            bundle.putString("calorie", exerciseDetails.get("calorie"));
+            bundle.putString("time", exerciseDetails.get("time"));
         }
         return bundle;
     }

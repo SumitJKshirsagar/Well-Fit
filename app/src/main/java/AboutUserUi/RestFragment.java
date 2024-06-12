@@ -3,6 +3,7 @@ package AboutUserUi;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,8 @@ import java.util.Locale;
 import UI.Phase2;
 
 public class RestFragment extends Fragment implements TextToSpeech.OnInitListener {
+    private static final String TAG = "RestFragment";
+
     private TextView textViewTimer, reps, names;
     private CountDownTimer countDownTimer;
     private ImageView img;
@@ -33,6 +36,7 @@ public class RestFragment extends Fragment implements TextToSpeech.OnInitListene
     private boolean isHalfTimeAnnounced = false;
     private boolean isNextExerciseAnnounced = false;
     private boolean isInitialAnnounced = false;
+    private boolean isTtsInitialized = false; // TTS initialization flag
 
     @Nullable
     @Override
@@ -94,12 +98,20 @@ public class RestFragment extends Fragment implements TextToSpeech.OnInitListene
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
+
+        // Reset flags
+        isHalfTimeAnnounced = false;
+        isNextExerciseAnnounced = false;
+        isInitialAnnounced = false;
+
         countDownTimer = new CountDownTimer(timeInMillis, 1000) {
             public void onTick(long millisUntilFinished) {
                 timeLeftInMillis = millisUntilFinished;
                 updateTimerDisplay(millisUntilFinished);
                 // Speak rest time updates
-                speakRestTimeUpdates(millisUntilFinished);
+                if (isTtsInitialized) {
+                    speakRestTimeUpdates(millisUntilFinished);
+                }
             }
 
             public void onFinish() {
@@ -133,11 +145,15 @@ public class RestFragment extends Fragment implements TextToSpeech.OnInitListene
             int result = textToSpeech.setLanguage(Locale.US);
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 // Language data is missing or language is not supported
-                // Handle the error here, if needed
+                Log.e(TAG, "Language not supported or missing data");
+                Toast.makeText(getContext(), "Language not supported or missing data", Toast.LENGTH_SHORT).show();
+            } else {
+                isTtsInitialized = true; // TTS is successfully initialized
             }
         } else {
             // Initialization failed
-            // Handle the error here, if needed
+            Log.e(TAG, "TextToSpeech initialization failed");
+            Toast.makeText(getContext(), "TextToSpeech initialization failed", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -149,11 +165,15 @@ public class RestFragment extends Fragment implements TextToSpeech.OnInitListene
             // Speak "Rest" only once at the beginning
             textToSpeech.speak("Rest", TextToSpeech.QUEUE_FLUSH, null, null);
             isInitialAnnounced = true;
-        } else if (!isHalfTimeAnnounced && millisUntilFinished <= halfTime) {
+        }
+
+        if (!isHalfTimeAnnounced && millisUntilFinished <= halfTime) {
             // Speak when half time is reached
             textToSpeech.speak("Half time reached", TextToSpeech.QUEUE_FLUSH, null, null);
             isHalfTimeAnnounced = true;
-        } else if (!isNextExerciseAnnounced && millisUntilFinished <= tenSeconds) {
+        }
+
+        if (!isNextExerciseAnnounced && millisUntilFinished <= tenSeconds) {
             // Speak the name of the next exercise when there are 10 seconds remaining
             String nextExerciseName = names.getText().toString();
             textToSpeech.speak("Next exercise: " + nextExerciseName, TextToSpeech.QUEUE_FLUSH, null, null);

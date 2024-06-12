@@ -64,9 +64,6 @@ dependencies {
     implementation("com.intuit.ssp:ssp-android:1.0.6")
     implementation ("com.github.dangiashish:Auto-Image-Slider:1.0.6")
     implementation ("com.squareup.picasso:picasso:2.71828")
-
-
-
-
-
+    implementation ("com.github.dangiashish:Auto-Image-Slider:1.0.6")
+    implementation ("com.squareup.picasso:picasso:2.71828")
 }
