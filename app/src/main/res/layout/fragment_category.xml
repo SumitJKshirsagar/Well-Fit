@@ -60,90 +60,16 @@
                 android:drawableStart="@drawable/search_24dp_fill0_wght400_grad0_opsz24"
                 android:drawableTint="@color/black"/>
         </androidx.cardview.widget.CardView>
-        <RelativeLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/category_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/search"
-            android:gravity="center"
-            android:id="@+id/r1"
-            android:layout_margin="20dp"
-            >
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:id="@+id/c1"
-                android:layout_margin="5dp"
-                />
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/c1"
-                android:text="Strength"
-                android:gravity="center"
-                android:layout_margin="5dp"
-                android:textColor="@color/black"
-                android:textSize="18dp"/>
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:id="@+id/c2"
-                android:layout_toEndOf="@id/c1"
-                android:layout_margin="5dp"
-                />
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/c2"
-                android:text="Calisthenics"
-                android:gravity="center"
-                android:layout_toEndOf="@id/c1"
-                android:layout_margin="5dp"
-                android:textColor="@color/black"
-                android:textSize="18dp"/>
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:id="@+id/c3"
-                android:layout_toEndOf="@id/c2"
-                android:layout_margin="5dp"
-                />
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/c3"
-                android:text="Strecthing"
-                android:gravity="center"
-                android:layout_toEndOf="@id/c2"
-                android:layout_margin="5dp"
-                android:textColor="@color/black"
-                android:textSize="18dp"/>
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/r1"
-            android:id="@+id/r2"
-            android:gravity="center"
-            android:layout_margin="5dp"
-            >
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:id="@+id/c5"
-                android:layout_toEndOf="@id/c4"
-                android:layout_margin="5dp"
-                />
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/c5"
-                android:text="HIIT"
-                android:gravity="center"
-                android:layout_toEndOf="@id/c4"
-                android:layout_margin="5dp"
-                android:textColor="@color/black"
-                android:textSize="18dp"/>
-        </RelativeLayout>
+            android:layout_margin="@dimen/_10sdp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="3"
+            />
     </RelativeLayout>
 
 </FrameLayout>

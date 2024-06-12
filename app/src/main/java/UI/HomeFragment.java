@@ -125,10 +125,6 @@ public class HomeFragment extends Fragment {
         exerciseAdapter = new ExerciseAdapter(exerciseList, getContext(), "exercise");
         searchView = view.findViewById(R.id.searchView);
 
-
-
-
-
         // set any default animation or custom animation (setSlideAnimation(ImageAnimationTypes.ZOOM_IN))
         autoImageSlider.setDefaultAnimation();
 
@@ -149,11 +145,6 @@ public class HomeFragment extends Fragment {
 
             }
         });
-
-
-
-
-
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
