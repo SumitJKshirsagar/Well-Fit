@@ -49,7 +49,7 @@ public class home extends AppCompatActivity {
                 if (itemId == R.id.home) {
                     selectedFragment = new HomeFragment();
                 } else if (itemId == R.id.dumbell) {
-                    selectedFragment = new DumbellFragment();
+                    selectedFragment = new HistoryFragment();
                 } else if (itemId == R.id.discover) {
                     selectedFragment = new ProfileFragment();
                 } else if (itemId == R.id.setting) {

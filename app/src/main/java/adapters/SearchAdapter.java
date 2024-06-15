@@ -24,6 +24,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     private List<Suggest> suggestList;
     private Context context;
     private String type;
+    public void seFilteredList(List<Suggest> filteredList){
+        this.suggestList = filteredList;
+        notifyDataSetChanged();
+    }
 
     public SearchAdapter(Context context, List<Suggest> suggestList, String type) {
         this.context = context;
@@ -34,7 +38,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     @NonNull
     @Override
     public SearchAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.category, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_item, parent, false);
         return new ViewHolder(view);
     }
 

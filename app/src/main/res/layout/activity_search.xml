@@ -21,6 +21,7 @@
           app:layout_constraintEnd_toEndOf="parent"
           android:background="@drawable/divider_bg"
           android:textSize="@dimen/_15sdp"
+          android:iconifiedByDefault="false"
          />
 
 
@@ -36,5 +37,6 @@
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="3"
+
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

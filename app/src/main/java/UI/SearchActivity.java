@@ -1,6 +1,8 @@
 package UI;
 
 import android.os.Bundle;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,11 +26,30 @@ public class SearchActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private SearchAdapter searchAdapter;
     private List<Suggest> suggestList;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        searchView=findViewById(R.id.search_View);
+        searchView.clearFocus();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterList(newText);
+                return true;
+            }
+
+
+        });
+
 
         recyclerView = findViewById(R.id.search_item_rv);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3)); // Display 3 items per row
@@ -70,4 +91,20 @@ public class SearchActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    private void filterList(String text) {
+        List<Suggest> filterList = new ArrayList<>();
+        for (Suggest suggest : suggestList){
+            if (suggest.getName().toLowerCase().contains(text.toLowerCase())){
+                filterList.add(suggest);
+            }
+        }
+
+        if (filterList.isEmpty()){
+            Toast.makeText(this,"No Exercise Found",Toast.LENGTH_SHORT).show();
+        }else {
+            searchAdapter.seFilteredList(filterList);
+        }
+    }
+
 }
